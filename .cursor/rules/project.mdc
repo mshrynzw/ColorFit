@@ -1,0 +1,38 @@
+---
+description: ColorFit project-wide development rules
+alwaysApply: true
+---
+
+# ColorFit Project Rules
+
+## Architecture
+
+- ColorFit is a monorepo containing a React frontend and a Python backend.
+- The frontend is located in `frontend/`.
+- The backend is located in `backend/`.
+- Frontend and backend responsibilities must remain clearly separated.
+- The frontend communicates with the backend through HTTP APIs.
+- Image processing must be implemented in the Python backend.
+
+## Frontend
+
+- Use React with TypeScript.
+- Use React Router for routing.
+- Do not implement image processing logic in the frontend.
+- API communication must be separated from UI components.
+
+## Backend
+
+- Use Python with FastAPI.
+- Use type hints.
+- Use Pydantic for request and response validation.
+- Keep API routing and business logic separated.
+- Image processing logic belongs in backend services.
+
+## General
+
+- Do not introduce unnecessary dependencies.
+- Prefer simple and maintainable solutions.
+- Do not modify unrelated files.
+- Keep the existing architecture unless there is a clear reason to change it.
+

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>調整結果 ― ColorFit</title>
+<meta name="description" content="ColorFitによる画像のカラー調整結果を確認し、書き出せる画面。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&amp;family=Noto+Sans+JP:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow--cyan"></div>
+  <div class="bg-glow bg-glow--violet"></div>
+  <div class="bg-noise"></div>
+</div>
+
+<a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+
+<!-- ===== ヘッダー ===== -->
+<header class="app-header" id="app-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="../index.html" class="logo" data-anim="header-in" aria-label="ColorFit ホームへ">ColorFit</a>
+      <span class="header-divider" aria-hidden="true">/</span>
+      <span class="header-page" data-anim="header-in">調整結果</span>
+    </div>
+
+    <div class="header-actions">
+      <button type="button" class="btn btn--ghost btn--small" id="btn-save" data-anim="header-in">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4h9l3 3v9a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 4v4h6V4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        保存
+      </button>
+      <button type="button" class="btn btn--primary btn--small" id="btn-export-header" data-anim="header-in">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9m0 0l-3.5-3.5M10 12l3.5-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 14v1.5A1.5 1.5 0 005.5 17h9a1.5 1.5 0 001.5-1.5V14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        書き出す
+      </button>
+
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-label="アクションメニューを開く" aria-expanded="false" aria-controls="mobile-actions" data-anim="header-in">
+        <span class="menu-toggle__bar"></span>
+        <span class="menu-toggle__bar"></span>
+        <span class="menu-toggle__bar"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-actions" id="mobile-actions" aria-hidden="true">
+    <button type="button" class="btn btn--ghost btn--block" id="btn-save-mobile">保存</button>
+    <button type="button" class="btn btn--primary btn--block" id="btn-export-header-mobile">書き出す</button>
+  </div>
+
+  <div class="sr-only" role="status" aria-live="polite" id="live-status"></div>
+</header>
+
+<main id="main" class="result-main">
+
+  <!-- ===== 完了ステータス ===== -->
+  <div class="status-banner" data-anim="status">
+    <span class="status-banner__glow" aria-hidden="true"></span>
+    <span class="status-banner__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.4"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="status-banner__text">調整が完了しました</span>
+  </div>
+
+  <div class="result-grid">
+
+    <!-- ===== メインビジュアル ===== -->
+    <section class="result-primary" aria-label="調整結果の画像">
+
+      <figure class="result-figure glass-panel" data-anim="main-image">
+        <div class="result-image-wrap" id="result-image-wrap">
+
+          <div class="simple-view" id="simple-view">
+            <img id="img-simple-before" class="simple-view__img" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;w=1400&amp;q=75" alt="調整前の画像">
+            <img id="img-simple-after" class="simple-view__img is-active" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;w=1400&amp;q=75" alt="ColorFitによる調整後の画像">
+          </div>
+
+          <div class="compare-slider" id="compare-slider" hidden role="slider" tabindex="0" aria-label="調整前・調整後の比較スライダー" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-orientation="horizontal">
+            <div class="compare-layer compare-layer--before">
+              <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;w=1400&amp;q=75" alt="調整前の画像">
+              <span class="compare-tag compare-tag--before">調整前</span>
+            </div>
+            <div class="compare-layer compare-layer--after" id="compare-after">
+              <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;w=1400&amp;q=75" alt="調整後の画像">
+              <span class="compare-tag compare-tag--after">調整後</span>
+            </div>
+            <div class="compare-handle" id="compare-handle" aria-hidden="true">
+              <span class="compare-handle__grip">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M6 4L2 8l4 4M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <figcaption class="result-toggle-row">
+          <div class="toggle-group" role="group" aria-label="表示切り替え">
+            <button type="button" class="toggle-btn" id="btn-show-before" aria-pressed="false">調整前</button>
+            <button type="button" class="toggle-btn is-active" id="btn-show-after" aria-pressed="true">調整後</button>
+          </div>
+          <button type="button" class="btn btn--ghost btn--small" id="btn-compare">比較する</button>
+        </figcaption>
+      </figure>
+
+      <div class="image-meta" id="image-meta" data-anim="meta">
+        <span class="image-meta__item">1920 × 1280 px</span>
+        <span class="image-meta__sep" aria-hidden="true">・</span>
+        <span class="image-meta__item">JPG</span>
+        <span class="image-meta__sep" aria-hidden="true">・</span>
+        <span class="image-meta__item">2.4 MB</span>
+      </div>
+    </section>
+
+    <!-- ===== サイドパネル：結果情報 ===== -->
+    <aside class="result-panel" aria-label="調整結果の詳細">
+
+      <!-- 使用した配色 -->
+      <section class="result-block glass-panel" data-anim="palette">
+        <h2 class="result-block__title">使用したデザインの配色</h2>
+        <ul class="palette-list">
+          <li class="palette-row">
+            <span class="palette-row__swatch" style="--sw:#1E3A5F;"></span>
+            <div class="palette-row__body">
+              <div class="palette-row__head">
+                <span class="palette-row__label">メイン</span>
+                <span class="palette-row__hex">#1E3A5F</span>
+                <span class="palette-row__pct">60%</span>
+              </div>
+              <div class="palette-row__bar"><span style="width:60%; background:#1E3A5F;"></span></div>
+            </div>
+          </li>
+          <li class="palette-row">
+            <span class="palette-row__swatch" style="--sw:#D8B26E;"></span>
+            <div class="palette-row__body">
+              <div class="palette-row__head">
+                <span class="palette-row__label">サブ</span>
+                <span class="palette-row__hex">#D8B26E</span>
+                <span class="palette-row__pct">30%</span>
+              </div>
+              <div class="palette-row__bar"><span style="width:30%; background:#D8B26E;"></span></div>
+            </div>
+          </li>
+          <li class="palette-row">
+            <span class="palette-row__swatch" style="--sw:#F5F1E8;"></span>
+            <div class="palette-row__body">
+              <div class="palette-row__head">
+                <span class="palette-row__label">アクセント</span>
+                <span class="palette-row__hex">#F5F1E8</span>
+                <span class="palette-row__pct">10%</span>
+              </div>
+              <div class="palette-row__bar"><span style="width:10%; background:#F5F1E8;"></span></div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ColorFit解析結果 -->
+      <section class="result-block glass-panel result-analysis" data-anim="palette" aria-label="ColorFit解析結果">
+        <h2 class="result-block__title">ColorFit解析結果</h2>
+        <div class="analysis-row">
+          <svg class="analysis-gauge" viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="analysis-gauge__track" cx="40" cy="40" r="34"/>
+            <circle class="analysis-gauge__value" id="analysis-gauge-value" cx="40" cy="40" r="34"/>
+          </svg>
+          <div class="analysis-row__body">
+            <p class="analysis-row__label">デザインとの色調和</p>
+            <p class="analysis-row__result">非常に良好</p>
+            <p class="analysis-row__score"><span id="analysis-score">92</span>%</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 調整内容 -->
+      <section class="result-block glass-panel" data-anim="adjust" aria-label="調整内容">
+        <h2 class="result-block__title">調整内容</h2>
+        <ul class="adjust-list">
+          <li class="adjust-item"><span class="adjust-item__label">色温度</span><span class="adjust-item__val adjust-item__val--up">+12</span></li>
+          <li class="adjust-item"><span class="adjust-item__label">彩度</span><span class="adjust-item__val adjust-item__val--up">+4</span></li>
+          <li class="adjust-item"><span class="adjust-item__label">明るさ</span><span class="adjust-item__val adjust-item__val--up">+2</span></li>
+          <li class="adjust-item"><span class="adjust-item__label">コントラスト</span><span class="adjust-item__val adjust-item__val--up">+6</span></li>
+          <li class="adjust-item"><span class="adjust-item__label">色相</span><span class="adjust-item__val adjust-item__val--down">-2</span></li>
+        </ul>
+      </section>
+
+      <!-- 書き出し設定 -->
+      <section class="result-block glass-panel result-export" data-anim="export" aria-label="書き出し設定">
+        <h2 class="result-block__title result-block__title--small">書き出し設定</h2>
+
+        <div class="export-field">
+          <span class="export-field__label">形式</span>
+          <div class="segmented" role="group" aria-label="書き出し形式">
+            <button type="button" class="segmented__btn is-active" data-format="webp" aria-pressed="true">
+              WebP<span class="segmented__badge">推奨</span>
+            </button>
+            <button type="button" class="segmented__btn" data-format="jpeg" aria-pressed="false">JPEG</button>
+            <button type="button" class="segmented__btn" data-format="png" aria-pressed="false">PNG</button>
+          </div>
+        </div>
+
+        <div class="export-field">
+          <span class="export-field__label">画質</span>
+          <div class="segmented" role="group" aria-label="画質">
+            <button type="button" class="segmented__btn" data-quality="high" aria-pressed="false">高品質</button>
+            <button type="button" class="segmented__btn is-active" data-quality="standard" aria-pressed="true">標準</button>
+            <button type="button" class="segmented__btn" data-quality="light" aria-pressed="false">軽量</button>
+          </div>
+        </div>
+
+        <div class="export-field">
+          <label class="export-field__label" for="filename-input">ファイル名</label>
+          <input type="text" id="filename-input" class="filename-input" value="hero-image-colorfit.webp" autocomplete="off" aria-describedby="filename-hint">
+          <span class="sr-only" id="filename-hint">拡張子は書き出し形式に応じて自動的に更新されます</span>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <div class="result-cta" data-anim="cta">
+        <button type="button" class="btn btn--primary btn--large btn--block btn--export" id="btn-export">
+          <span class="btn--export__label">画像を書き出す</span>
+          <svg class="btn--export__check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle class="check-ring" cx="12" cy="12" r="10"/>
+            <path class="check-mark" d="M7.5 12.5l3 3 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <p class="export-status" id="export-status" role="status" aria-live="polite"></p>
+        <a href="../02-editor/index.html" class="btn btn--ghost btn--large btn--block" id="btn-again">もう一度調整する</a>
+      </div>
+
+    </aside>
+  </div>
+</main>
+
+<script src="script.js" defer></script>
+</body>
+</html>

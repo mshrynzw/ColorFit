@@ -1511,6 +1511,40 @@ Phase 12：Testing
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 13：UI / UX改善
+
+### 作業
+
+- UI Reference（Home / Editor / Result / Settings）と実装を比較し、Visual / Responsive / Glow / Animation の差分を埋めた
+- Result / Error Boundary の Empty / Loading / Error を、Icon・説明・次アクションが分かる Feedback UI に揃えた
+
+### 変更内容
+
+- Home ヒーローに配色 → 元画像 → 調整後の流れを復元した（外部画像には依存せず、CSS の風景モックを使用）
+- Feature カードにアイコン、最終 CTA に Glow、背景に Noise / Glow の緩やかな動きを追加した
+- Home に GSAP 入場 Animation を追加し、Reduced Motion 設定では無効化した
+- Result の Empty / Loading / Error と想定外エラーを、共通の EmptyState / LoadingIndicator に統一した
+
+### 技術的判断
+
+- ヒーローの Before / After は Unsplash 等の外部画像を使わず、UI Reference の fallback と同じく CSS で表現する
+- Empty / Error / Loading は Page ごとに別デザインを増やさず、`components/feedback` の共通 Component を使う
+- ライトテーマや JPEG 書き出しなど、Settings の未接続項目は Phase 13 では触らない
+
+### 結果
+
+UI Reference に近い Visual Quality と、次アクションが分かる Empty / Error / Loading UX を揃えた。
+
+### Next Step
+
+- Phase 14：Performance / Security
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

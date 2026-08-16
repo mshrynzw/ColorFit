@@ -11,8 +11,9 @@ export function BackgroundLayer() {
             'radial-gradient(ellipse 70% 60% at 50% 20%, black 30%, transparent 75%)',
         }}
       />
-      <div className="bg-glow absolute top-[-10%] left-[-10%] h-[60vw] max-h-[900px] w-[60vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,var(--color-primary),transparent_70%)] opacity-[0.16] blur-[120px]" />
-      <div className="bg-glow absolute top-[20%] right-[-15%] h-[60vw] max-h-[900px] w-[60vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,var(--color-secondary),transparent_70%)] opacity-[0.16] blur-[120px]" />
+      <div className="bg-glow bg-glow--cyan absolute top-[-10%] left-[-10%] h-[60vw] max-h-[900px] w-[60vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,var(--color-primary),transparent_70%)] opacity-[0.16] blur-[120px]" />
+      <div className="bg-glow bg-glow--violet absolute top-[20%] right-[-15%] h-[60vw] max-h-[900px] w-[60vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,var(--color-secondary),transparent_70%)] opacity-[0.16] blur-[120px]" />
+      <div className="bg-noise" />
     </div>
   )
 }

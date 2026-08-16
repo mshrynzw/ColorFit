@@ -64,6 +64,9 @@ describe('result page', () => {
 
     expect(screen.getByRole('heading', { name: '調整結果' })).toBeInTheDocument()
     expect(screen.getByText('まだ調整結果がありません。')).toBeInTheDocument()
+    expect(
+      screen.getByText('エディターで画像を調整すると、ここに結果が表示されます。'),
+    ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'エディターへ戻る' })).toBeInTheDocument()
   })
 
@@ -125,6 +128,9 @@ describe('result page', () => {
     renderResult('/result?imageId=550e8400-e29b-41d4-a716-446655440000')
 
     expect(await screen.findByText('処理結果が見つかりません。')).toBeInTheDocument()
+    expect(
+      screen.getByText('エディターで画像を調整し直すか、別の画像でお試しください。'),
+    ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'エディターへ戻る' })).toBeInTheDocument()
   })
 

@@ -25,6 +25,10 @@ describe('frontend routes', () => {
         name: 'Webデザインに、画像の色を合わせる。',
       }),
     ).toBeInTheDocument()
+    expect(screen.getByText('01 ／ デザインの配色')).toBeInTheDocument()
+    expect(screen.getByText('02 ／ 元の画像')).toBeInTheDocument()
+    expect(screen.getByText('03 ／ 調整後の画像')).toBeInTheDocument()
+    expect(screen.getByText('デザインの色を解析')).toBeInTheDocument()
   })
 
   it('navigates from home to editor', async () => {

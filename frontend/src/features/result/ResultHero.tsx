@@ -1,6 +1,7 @@
 export function ResultHero() {
   return (
     <div className="result-status-banner">
+      <span className="result-status-banner__glow" aria-hidden="true" />
       <span className="result-status-banner__icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.4" />

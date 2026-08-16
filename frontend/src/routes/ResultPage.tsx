@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+import { EmptyState } from '../components/feedback/EmptyState'
 import { ButtonLink } from '../components/ui/Button'
 import { DownloadButton } from '../features/result/DownloadButton'
 import { ImageComparison } from '../features/result/ImageComparison'
@@ -41,27 +42,34 @@ export function ResultPage() {
 
   if (result.status === 'empty' || !imageId) {
     return (
-      <EmptyResult
+      <ResultFeedback
         title="調整結果"
-        message="まだ調整結果がありません。"
+        description="まだ調整結果がありません。"
+        hint="エディターで画像を調整すると、ここに結果が表示されます。"
       />
     )
   }
 
   if (result.status === 'loading') {
     return (
-      <EmptyResult title="調整結果" message="調整結果を読み込んでいます…" busy />
+      <ResultFeedback
+        title="調整結果"
+        description="調整結果を読み込んでいます…"
+        tone="loading"
+        busy
+      />
     )
   }
 
   if (result.status === 'error' || !result.originalUrl || !result.processedUrl) {
     return (
-      <EmptyResult
-        title="調整結果"
-        message={
-          result.errorMessage ??
-          '処理結果が見つかりません。エディターで画像を調整してください。'
+      <ResultFeedback
+        title="調整結果を表示できません"
+        description={
+          result.errorMessage ?? '処理結果が見つかりません。'
         }
+        hint="エディターで画像を調整し直すか、別の画像でお試しください。"
+        tone="error"
       />
     )
   }
@@ -126,29 +134,34 @@ export function ResultPage() {
   )
 }
 
-function EmptyResult({
+function ResultFeedback({
   title,
-  message,
+  description,
+  hint,
+  tone = 'empty',
   busy = false,
 }: {
   title: string
-  message: string
+  description: string
+  hint?: string
+  tone?: 'empty' | 'error' | 'loading'
   busy?: boolean
 }) {
   return (
     <main
       id="main"
       className="relative z-10 pt-[calc(var(--header-h)+48px)] pb-20"
-      aria-busy={busy}
+      aria-busy={busy || undefined}
     >
-      <div className="mx-auto max-w-[720px] px-5 md:px-8">
-        <h1 className="font-heading text-3xl font-bold md:text-4xl">{title}</h1>
-        <p className="mt-4 max-w-2xl text-text-muted" role={busy ? 'status' : undefined}>
-          {message}
-        </p>
-        <div className="mt-8">
-          <ButtonLink to={ROUTES.editor}>エディターへ戻る</ButtonLink>
-        </div>
+      <div className="mx-auto max-w-[640px] px-5 md:px-8">
+        <EmptyState
+          title={title}
+          description={description}
+          hint={hint}
+          tone={tone}
+          busy={busy}
+          action={<ButtonLink to={ROUTES.editor}>エディターへ戻る</ButtonLink>}
+        />
       </div>
     </main>
   )

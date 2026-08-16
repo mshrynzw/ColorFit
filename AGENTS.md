@@ -64,6 +64,7 @@ docs/
 ├── 06_api.md
 ├── 07_component_design.md
 ├── 08_ui_guideline.md
+├── 10_deployment.md
 ├── screen-list.md
 ├── roadmap.md
 └── development-log.md
@@ -111,6 +112,10 @@ React Componentをどう設計するのか
 08_ui_guideline.md
     ↓
 UIをどのようなルールで作るのか
+
+10_deployment.md
+    ↓
+本番へどう公開するのか
 
 screen-list.md
     ↓

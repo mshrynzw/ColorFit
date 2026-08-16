@@ -1579,6 +1579,42 @@ Production公開前の Performance / Security を、設計書の範囲で実装�
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 15：Deployment
+
+### 作業
+
+- Frontend は Vercel、Backend は Render、Storage は Cloudflare R2 とする Deploy 設定を追加した
+- Production 起動時に CORS / R2 設定を検証し、GitHub Actions の CI を追加した
+- 手順を `docs/10_deployment.md` にまとめた
+
+### 変更内容
+
+Production へ公開できる構成ファイルと Environment Variable 方針を整えた。
+
+### 技術的判断
+
+- Hosting は Basic Design どおり Vercel / Render / R2 を採用する
+- Backend は uv を含む Docker Image で Render へ載せる
+- 実 Deploy は Hosting アカウントと Secret が必要なため、この Phase では設定と Build / Health Check までを完了とする
+- boto3 を Backend 依存に追加し、Production の R2 Adapter を実行時に不足しないようにした
+
+### 結果
+
+- Frontend: 52 passed
+- Backend: 57 passed
+- Production Build: Frontend `pnpm build` 成功
+
+### Next Step
+
+- Vercel / Render / R2 のアカウント接続後に実 Deploy
+- Phase 16：MVP Release
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

@@ -11,6 +11,7 @@ from app.core.request_context import REQUEST_ID_HEADER
 
 def create_app() -> FastAPI:
     settings = get_settings()
+    settings.validate_for_app()
     setup_logging(settings.log_level)
 
     application = FastAPI(

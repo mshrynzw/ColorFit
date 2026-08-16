@@ -48,3 +48,7 @@ pnpm lint
 pnpm typecheck
 pnpm test
 ```
+
+## Production
+
+Vercel へ Deploy します。`VITE_API_BASE_URL` に Backend の Production URL を設定してください。手順は `docs/10_deployment.md` を参照してください。

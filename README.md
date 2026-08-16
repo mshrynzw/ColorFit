@@ -78,3 +78,10 @@ uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ## ドキュメント
 
 設計書は `docs/` を正とします。
+
+本番公開の手順は `docs/10_deployment.md` を参照してください。
+
+- Frontend: Vercel（`frontend/vercel.json`）
+- Backend: Render（`render.yaml` / `backend/Dockerfile`）
+- Storage: Cloudflare R2
+- CI: `.github/workflows/ci.yml`

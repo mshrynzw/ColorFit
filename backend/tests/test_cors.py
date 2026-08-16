@@ -1,7 +1,6 @@
 from fastapi.testclient import TestClient
 
 from app.core.config import get_settings
-from app.main import create_app
 
 
 def test_allows_configured_frontend_origin(client: TestClient) -> None:

@@ -1222,17 +1222,17 @@ DeploymentはFrontend / Backend / Storageを分離する。
 
 FrontendはReact ApplicationとしてDeployする。
 
-候補となるHostingは、
+MVPでは Basic Design に従い Vercel を使用する。
 
 ```text
+GitHub
+ ↓
 Vercel
-Cloudflare Pages
-Netlify
+ ↓
+React Application
 ```
 
-など。
-
-最終的なHostingは無料枠、React Routerとの相性、Deploymentの容易さを考慮して決定する。
+SPA の直接 URL（`/editor` など）は Hosting 側で `index.html` へフォールバックする。
 
 ---
 
@@ -1240,18 +1240,17 @@ Netlify
 
 BackendはPython / FastAPIをDeployできるHostingを利用する。
 
-候補：
+MVPでは Basic Design に従い Render を使用する。
 
 ```text
+GitHub
+ ↓
 Render
-Railway
-Fly.io
-Cloud Run
+ ↓
+FastAPI
 ```
 
-など。
-
-最終的なHostingは無料枠、Sleep / Cold Start、Image ProcessingのResource制限などを考慮して決定する。
+Health Check は `GET /health` を使用する。
 
 ---
 

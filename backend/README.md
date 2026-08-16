@@ -60,3 +60,10 @@ DELETE /api/images/{imageId}
 ```bash
 uv run pytest
 ```
+
+## Production
+
+Production では `APP_ENV=production` と `STORAGE_BACKEND=r2` を使用します。起動方法と Environment Variables は `docs/10_deployment.md` を参照してください。
+
+Health Check: `GET /health` / `HEAD /health`
+

@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+from pytest import raises
 
 from app.core.config import get_settings
 from app.core.exceptions import ErrorCode
@@ -46,6 +47,33 @@ def test_production_hides_openapi(monkeypatch) -> None:
     assert response.status_code == 404
     assert docs.status_code == 404
     assert "swagger" not in response.text.lower()
-    assert "openapi" not in docs.text.lower() or docs.headers["content-type"].startswith(
+    content_type = docs.headers["content-type"]
+    assert "openapi" not in docs.text.lower() or content_type.startswith(
         "application/json"
     )
+
+
+def test_production_requires_cors_origins(monkeypatch) -> None:
+    monkeypatch.setenv("APP_ENV", "production")
+    monkeypatch.setenv("CORS_ORIGINS", "")
+    get_settings.cache_clear()
+    try:
+        with raises(RuntimeError, match="CORS_ORIGINS"):
+            create_app()
+    finally:
+        get_settings.cache_clear()
+
+
+def test_production_requires_r2_credentials(monkeypatch) -> None:
+    monkeypatch.setenv("APP_ENV", "production")
+    monkeypatch.setenv("STORAGE_BACKEND", "r2")
+    monkeypatch.setenv("R2_ENDPOINT", "")
+    monkeypatch.setenv("R2_ACCESS_KEY_ID", "")
+    monkeypatch.setenv("R2_SECRET_ACCESS_KEY", "")
+    monkeypatch.setenv("R2_BUCKET_NAME", "")
+    get_settings.cache_clear()
+    try:
+        with raises(RuntimeError, match="R2"):
+            create_app()
+    finally:
+        get_settings.cache_clear()

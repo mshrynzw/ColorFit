@@ -19,7 +19,9 @@ class RateLimiter:
         now = time.monotonic()
         key = (client_id, bucket)
         with self._lock:
-            recent = [stamp for stamp in self._hits.get(key, []) if now - stamp < window]
+            recent = [
+                stamp for stamp in self._hits.get(key, []) if now - stamp < window
+            ]
             if len(recent) >= limit:
                 self._hits[key] = recent
                 return False

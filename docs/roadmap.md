@@ -1125,11 +1125,11 @@ Production用Environment Variablesを設定する。
 - [ ] Frontend Deploy
 - [ ] Backend Deploy
 - [ ] Storage Deploy
-- [ ] Environment Variables
-- [ ] CORS Production設定
-- [ ] API URL設定
-- [ ] Production Build
-- [ ] Health Check
+- [x] Environment Variables
+- [x] CORS Production設定
+- [x] API URL設定
+- [x] Production Build
+- [x] Health Check
 
 ---
 

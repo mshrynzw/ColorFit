@@ -42,6 +42,25 @@ class Settings(BaseSettings):
             if origin.strip() and origin.strip() != "*"
         ]
 
+    def validate_for_app(self) -> None:
+        if self.is_development:
+            return
+        if not self.cors_origin_list:
+            raise RuntimeError(
+                "CORS_ORIGINS must be set to the Frontend origin in production."
+            )
+        if self.storage_backend.strip().lower() == "r2" and not all(
+            [
+                self.r2_endpoint,
+                self.r2_access_key_id,
+                self.r2_secret_access_key,
+                self.r2_bucket_name,
+            ]
+        ):
+            raise RuntimeError(
+                "R2 configuration is required when STORAGE_BACKEND=r2."
+            )
+
     def rate_limit_for(self, bucket: str) -> tuple[int, int]:
         limits = {
             "upload": self.rate_limit_upload,

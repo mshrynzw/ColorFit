@@ -9,3 +9,10 @@ def test_health_returns_ok(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
     assert REQUEST_ID_HEADER in response.headers
+
+
+def test_health_head_returns_ok(client: TestClient) -> None:
+    response = client.head("/health")
+
+    assert response.status_code == 200
+    assert REQUEST_ID_HEADER in response.headers

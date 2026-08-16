@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     )
 
     app_env: str = "development"
+    log_level: str = "INFO"
     cors_origins: str = "http://localhost:5173"
     max_upload_size: int = 10 * 1024 * 1024
     r2_endpoint: str = ""
@@ -19,11 +20,13 @@ class Settings(BaseSettings):
     r2_bucket_name: str = ""
 
     @property
+    def is_development(self) -> bool:
+        return self.app_env == "development"
+
+    @property
     def cors_origin_list(self) -> list[str]:
         return [
-            origin.strip()
-            for origin in self.cors_origins.split(",")
-            if origin.strip()
+            origin.strip() for origin in self.cors_origins.split(",") if origin.strip()
         ]
 
 

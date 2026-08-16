@@ -30,6 +30,18 @@ API は `http://localhost:8000` で起動します。
 - Health Check: `GET /health`
 - OpenAPI UI: `http://localhost:8000/docs`
 
+存在しないパスは統一 Error Response を返します。
+
+```json
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "指定されたリソースが見つかりません。",
+    "requestId": "..."
+  }
+}
+```
+
 ## テスト
 
 ```bash

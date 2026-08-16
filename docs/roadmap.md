@@ -350,17 +350,17 @@ Python / FastAPIによるBackend基盤を構築する。
 
 ## 作業項目
 
-- [ ] Python Environment
-- [ ] FastAPI
-- [ ] Project Structure
-- [ ] Router
-- [ ] Service Layer
-- [ ] Schema
-- [ ] Configuration
-- [ ] Environment Variables
-- [ ] CORS
-- [ ] Error Handling
-- [ ] Logging
+- [x] Python Environment
+- [x] FastAPI
+- [x] Project Structure
+- [x] Router
+- [x] Service Layer
+- [x] Schema
+- [x] Configuration
+- [x] Environment Variables
+- [x] CORS
+- [x] Error Handling
+- [x] Logging
 
 ---
 
@@ -392,6 +392,9 @@ GET /health
 ```
 
 などのHealth Checkが正常に返る状態にする。
+
+- [x] FastAPIが起動できる
+- [x] GET /health が正常に返る
 
 ---
 

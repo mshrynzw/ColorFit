@@ -1095,6 +1095,79 @@ Frontend の基本構造を、4画面が共通 Layout で表示できる状態�
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 3：Backend基盤
+
+### 作業
+
+- FastAPI の `create_app` で Application 生成を整理した
+- Health Check を Router → Service に分離した
+- 統一 Error Response（code / message / requestId）を追加した
+- `X-Request-ID` の Middleware と Logging を追加した
+- CORS を必要な Method / Header に制限した
+- Production では OpenAPI UI を無効化した
+- Health / Error / CORS / Request ID の pytest を追加した
+
+### 変更内容
+
+Backend を、後続の Image API を載せられる Layer 構造にした。
+
+### 技術的判断
+
+- API 設計に従い、Error Body は `error.code` / `error.message` / `error.requestId` に統一した
+- 未知のパスの 404 は `NOT_FOUND` とした。画像未検出の `IMAGE_NOT_FOUND` は Upload Phase で使う
+- Image Processing / Storage の空 Module は作らず、必要な Phase で追加する
+- CORS は `*` を使わず、Frontend Origin と必要な Header のみ許可する
+
+### 結果
+
+- `GET /health` は `{"status":"ok"}` を返す
+- 存在しないパスは統一 Error Response を返す
+- Backend の ruff / pytest が通る
+
+### Next Step
+
+- Phase 4：Storage基盤
+- Object Storage / Upload / Download / Lifecycle
+
+---
+
+## 2026-08-16
+
+### Phase
+
+Phase 3：Backend基盤
+
+### 作業
+
+- `X-Request-ID` が Uvicorn の実レスポンスに付かない問題を修正した
+- Health Check に HEAD を追加し、`curl -I` でも確認できるようにした
+
+### 問題
+
+`BaseHTTPMiddleware` で `call_next()` のあとに Header を足すと、ブラウザや `curl` の応答に `X-Request-ID` が含まれなかった。
+
+### 原因
+
+Starlette の `BaseHTTPMiddleware` は Response を包み直すため、後から付けた Header が実際の HTTP 応答に乗らないことがある。
+
+### 解決
+
+ASGI Middleware で `http.response.start` に `X-Request-ID` を付与するように変更した。
+
+### 結果
+
+GET / HEAD / 404 / 405 いずれでも `X-Request-ID` が付く。
+
+### Next Step
+
+- Phase 4：Storage基盤
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

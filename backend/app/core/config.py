@@ -14,10 +14,17 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     cors_origins: str = "http://localhost:5173"
     max_upload_size: int = 10 * 1024 * 1024
+    max_image_width: int = 8192
+    max_image_height: int = 8192
+    max_pixel_count: int = 20_000_000
+    image_ttl_hours: int = 24
+    storage_backend: str = "local"
+    storage_local_path: str = "./data/storage"
     r2_endpoint: str = ""
     r2_access_key_id: str = ""
     r2_secret_access_key: str = ""
     r2_bucket_name: str = ""
+    r2_public_base_url: str = ""
 
     @property
     def is_development(self) -> bool:

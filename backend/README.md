@@ -30,6 +30,17 @@ API は `http://localhost:8000` で起動します。
 - Health Check: `GET /health`
 - OpenAPI UI: `http://localhost:8000/docs`
 
+Development の画像保存先は `STORAGE_BACKEND=local`（既定）で、`STORAGE_LOCAL_PATH` 配下に置きます。Production では `STORAGE_BACKEND=r2` を使用します。
+
+画像 API：
+
+```text
+POST   /api/images
+GET    /api/images/{imageId}
+GET    /api/images/{imageId}/download
+DELETE /api/images/{imageId}
+```
+
 存在しないパスは統一 Error Response を返します。
 
 ```json

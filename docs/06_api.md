@@ -671,6 +671,34 @@ Image ID
 
 ---
 
+# 36.1. Image Dimensions Error
+
+幅・高さ、または総Pixel数が上限を超えた場合：
+
+```http
+422 Unprocessable Entity
+```
+
+```json
+{
+  "error": {
+    "code": "IMAGE_DIMENSIONS_TOO_LARGE",
+    "message": "画像の幅または高さが大きすぎます。",
+    "requestId": "..."
+  }
+}
+```
+
+上限は Environment Configuration で管理する。
+
+```text
+MAX_IMAGE_WIDTH
+MAX_IMAGE_HEIGHT
+MAX_PIXEL_COUNT
+```
+
+---
+
 # 37. Storage Upload Error
 
 ```http
@@ -1204,6 +1232,9 @@ Resultが存在しない場合：
 # 68. GET /api/images/{imageId}/download
 
 Processed ImageをDownloadする。
+
+Processed Imageがまだ存在しない場合は Original Image を返す。
+Phase 4では Image Processing 前のため、Original Image が Download 対象になる。
 
 ---
 

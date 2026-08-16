@@ -148,6 +148,10 @@ Cloudflare R2固有の処理はAdapterへ分離する。
 
 ```text
 storage/
+├── base.py
+├── factory.py
+├── keys.py
+├── local.py
 └── r2.py
 ```
 
@@ -159,6 +163,17 @@ storage/
 - Delete
 - Object Metadata
 - エラー変換
+
+DevelopmentではR2認証が無い場合に備え、`STORAGE_BACKEND=local` でローカルファイルシステムへ保存できる。
+
+```text
+STORAGE_BACKEND=local
+STORAGE_LOCAL_PATH=./data/storage
+```
+
+Productionでは`STORAGE_BACKEND=r2`を使用し、Frontendから直接R2へアクセスしない。
+
+Storage KeyはBackendが生成し、ユーザー入力のファイル名はKeyに使用しない。
 
 ---
 
@@ -800,6 +815,10 @@ MVPでは、処理結果をユーザーが確認・ダウンロードできる�
 不要になった画像は自動的に削除する。
 
 具体的な日数は、MVPの実装・テスト時に決定する。
+
+Phase 4では、画像メタデータの `createdAt` から `IMAGE_TTL_HOURS`（既定 24時間）を超えた画像を、取得時に削除して `IMAGE_NOT_FOUND` とする。
+
+`IMAGE_TTL_HOURS` が 0 以下の場合は期限切れ削除を行わない。
 
 ---
 

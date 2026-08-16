@@ -408,14 +408,14 @@ Upload Image / Processed Imageを保存できる仕組みを構築する。
 
 ## 作業項目
 
-- [ ] Object Storage設定
-- [ ] Bucket設定
-- [ ] Upload処理
-- [ ] Download処理
-- [ ] File Path設計
-- [ ] File Lifecycle設計
-- [ ] Access Control
-- [ ] Error Handling
+- [x] Object Storage設定
+- [x] Bucket設定
+- [x] Upload処理
+- [x] Download処理
+- [x] File Path設計
+- [x] File Lifecycle設計
+- [x] Access Control
+- [x] Error Handling
 
 ---
 
@@ -435,10 +435,10 @@ Object Storage
 
 ## 完了条件
 
-- [ ] ImageをUploadできる
-- [ ] Imageを取得できる
-- [ ] ImageをDownloadできる
-- [ ] 不正なFile Accessを防止できる
+- [x] ImageをUploadできる
+- [x] Imageを取得できる
+- [x] ImageをDownloadできる
+- [x] 不正なFile Accessを防止できる
 
 ---
 

@@ -1168,6 +1168,44 @@ GET / HEAD / 404 / 405 いずれでも `X-Request-ID` が付く。
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 4：Storage基盤
+
+### 作業
+
+- Storage を Adapter で抽象化し、Development は Local Filesystem、Production は Cloudflare R2 を選択できるようにした
+- Storage Key を `images/{uuid}/original` / `processed` / `meta.json` に統一した
+- `POST /api/images` / `GET /api/images/{imageId}` / `GET /api/images/{imageId}/download` / `DELETE /api/images/{imageId}` を追加した
+- Upload Validation（存在、サイズ、MIME、マジックバイト、Decode、幅・高さ・画素）を Backend に実装した
+- 画像メタデータを DB ではなく Storage 上の `meta.json` で管理し、TTL（既定 24時間）超過時は取得時に削除する
+
+### 変更内容
+
+Frontend が R2 に直接触れず、ImageService → StorageService → Adapter 経由で画像を保存・取得・削除できるようにした。
+
+### 技術的判断
+
+- 開発環境に R2 認証が無いため、既定は `STORAGE_BACKEND=local` とした。Production では `r2` を使う
+- MVP は Database を使わないため、表示用メタデータは `images/{id}/meta.json` に保存する
+- Storage Key にユーザーファイル名を使わず、Image ID は UUID のみ受け付ける
+- `GET /download` は仕様上 Processed Image だが、未処理の Phase 4 では Original を返す
+- 上限は環境変数で管理する（10MB、8192px、20,000,000px、TTL 24h）
+- Pillow と python-multipart を追加した。boto3 は R2 利用時に必要で、Adapter 側で遅延 import する
+
+### 結果
+
+- JPEG / PNG / WebP を Upload / 取得 / Download / 削除できる
+- 不正なパス・非対応形式・過大ファイルは統一 Error Response で拒否する
+
+### Next Step
+
+- Phase 5：Image Upload（Editor からの Upload UI）
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

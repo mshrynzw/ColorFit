@@ -73,6 +73,7 @@ uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 - Health Check: `GET /health`
 - OpenAPI UI: `http://localhost:8000/docs`
+- Image Upload: `POST /api/images`
 
 ## ドキュメント
 

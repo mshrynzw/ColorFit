@@ -27,7 +27,7 @@ def create_app() -> FastAPI:
         allow_credentials=False,
         allow_methods=["GET", "POST", "DELETE", "OPTIONS", "HEAD"],
         allow_headers=["Accept", "Content-Type", REQUEST_ID_HEADER],
-        expose_headers=[REQUEST_ID_HEADER],
+        expose_headers=[REQUEST_ID_HEADER, "Content-Disposition"],
     )
     application.add_middleware(RequestContextMiddleware)
 

@@ -157,6 +157,10 @@ backend/
 │   │   └── presets.py
 │   │
 │   ├── storage/
+│   │   ├── base.py
+│   │   ├── factory.py
+│   │   ├── keys.py
+│   │   ├── local.py
 │   │   └── r2.py
 │   │
 │   ├── core/
@@ -165,8 +169,8 @@ backend/
 │   │   └── logging.py
 │   │
 │   └── utils/
-│       ├── files.py
-│       └── validation.py
+│       ├── filenames.py
+│       └── image_validation.py
 │
 ├── tests/
 ├── pyproject.toml

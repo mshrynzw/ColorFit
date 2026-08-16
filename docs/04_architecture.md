@@ -1553,7 +1553,7 @@ Image Processing / Color Matching
 
 storage/
 ↓
-R2 Access
+Object Storage Access（Local / R2 Adapter）
 
 tests/
 ↓

@@ -91,6 +91,19 @@ describe('editor image upload', () => {
     expect(uploadImageMock).not.toHaveBeenCalled()
   })
 
+  it('rejects an oversized file before calling the api', async () => {
+    const file = new File(['png-bytes'], 'huge.png', { type: 'image/png' })
+    Object.defineProperty(file, 'size', { value: 10 * 1024 * 1024 + 1 })
+    renderEditor()
+
+    fireEvent.drop(screen.getByLabelText('画像のアップロード領域'), {
+      dataTransfer: { files: [file] },
+    })
+
+    expect(await screen.findByText('画像サイズが大きすぎます。')).toBeInTheDocument()
+    expect(uploadImageMock).not.toHaveBeenCalled()
+  })
+
   it('shows an api error message', async () => {
     const user = userEvent.setup()
     uploadImageMock.mockRejectedValue(

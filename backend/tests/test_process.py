@@ -65,6 +65,7 @@ def test_process_returns_completed_result(image_client: TestClient) -> None:
     fetched_result = fetched.json()["result"]
     assert fetched_result["resultUrl"] == f"/api/images/{image_id}/download"
     assert fetched_result["strength"] == 0.7
+    assert fetched_result["palette"][0]["color"] == "#1E3A5F"
     assert len(fetched_result["palette"]) == 3
 
     original = image_client.get(f"/api/images/{image_id}/download?source=original")

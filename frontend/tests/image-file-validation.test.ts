@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { MAX_UPLOAD_SIZE } from '../src/lib/constants/upload'
-import { validateImageFileBasic } from '../src/lib/validation/imageFile'
+import { validateImageFile, validateImageFileBasic } from '../src/lib/validation/imageFile'
 
 function createFile(name: string, type: string, size = 16) {
   const file = new File(['x'.repeat(Math.max(size, 1))], name, { type })
@@ -39,6 +39,32 @@ describe('validateImageFileBasic', () => {
     expect(result).toEqual({
       ok: false,
       message: '対応していない画像形式です。',
+    })
+  })
+})
+
+describe('validateImageFile', () => {
+  it('rejects dimensions that are too large', async () => {
+    vi.stubGlobal('createImageBitmap', async () => ({
+      width: 9000,
+      height: 100,
+      close: () => {},
+    }))
+    const result = await validateImageFile(createFile('wide.png', 'image/png'))
+    expect(result).toEqual({
+      ok: false,
+      message: '画像の幅または高さが大きすぎます。',
+    })
+  })
+
+  it('rejects a file that cannot be decoded', async () => {
+    vi.stubGlobal('createImageBitmap', async () => {
+      throw new Error('decode failed')
+    })
+    const result = await validateImageFile(createFile('broken.png', 'image/png'))
+    expect(result).toEqual({
+      ok: false,
+      message: '画像を読み込めませんでした。',
     })
   })
 })

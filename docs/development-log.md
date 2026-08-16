@@ -1479,6 +1479,38 @@ Frontend / Backend / Storage / Image Processing をつないだ一連の操作�
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 12：Testing
+
+### 作業
+
+- Frontend / Backend の既存Testを再実行し、足りない Palette / Upload / Image Processing のケースを追加した
+- Core User Flow の Integration Test を User Journey の確認として扱うようにした
+
+### 変更内容
+
+意図した動作を自動Testで確認できる範囲を広げた。
+
+### 技術的判断
+
+- MVPのE2Eは Playwright を追加せず、Vitest + Testing Library の画面通しTest（API Mock）で主要User Flowを確認する
+- 実BrowserのE2EはCI導入時（Phase 15）に検討する
+- Responsiveは自動Testではなく、画面実装時の確認と Phase 13 Visual QA に残す
+
+### 結果
+
+- Frontend: 50 passed
+- Backend: 48 passed
+
+### Next Step
+
+- Phase 13：UI / UX改善
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

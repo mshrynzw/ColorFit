@@ -49,6 +49,17 @@ def test_transform_preserves_alpha_and_size() -> None:
     assert with_alpha.getpixel((0, 0))[3] == 0
 
 
+def test_transform_jpeg_input_outputs_webp() -> None:
+    image = Image.new("RGB", (8, 8), (12, 34, 56))
+    buffer = BytesIO()
+    image.save(buffer, format="JPEG")
+
+    processed = transform_image(buffer.getvalue(), sample_input(0.5))
+    result = Image.open(BytesIO(processed))
+    assert result.format == "WEBP"
+    assert result.size == (8, 8)
+
+
 def test_high_strength_moves_red_toward_palette() -> None:
     image = Image.new("RGB", (8, 8), (220, 30, 30))
     buffer = BytesIO()

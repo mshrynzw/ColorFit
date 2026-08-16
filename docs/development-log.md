@@ -1347,6 +1347,71 @@ Editor だけで Upload から Process まで、UI Reference に沿った操作�
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 9：Result
+
+### 作業
+
+- `/result?imageId=` で Processed / Original を表示するようにした
+- 調整前 / 調整後の切り替えと比較スライダーを追加した
+- WebP の Download と「もう一度調整する」を接続した
+- Original 取得のため Download API に `source=original` を追加した
+
+### 変更内容
+
+Editor で調整したあとに Result で比較・書き出しできるようになった。
+
+### 技術的判断
+
+- Route は `/result` のまま、imageId は Query で渡す
+- Palette / Strength は process 時に meta へ保存し、Result で読み出す
+- 書き出し形式の選択や解析スコアは UI Reference にあるが MVP では WebP 固定とする
+- Editor へ戻るときは同じ imageId で Original を復元する
+
+### 結果
+
+- 結果がない `/result` では Empty State を出す
+- 比較スライダーと Download が動作する
+
+### Next Step
+
+- Phase 10：Settings
+
+---
+
+## 2026-08-16
+
+### Phase
+
+Phase 9：Result（Download ファイル名）
+
+### 作業
+
+- Processed Image の Download ファイル名を、固定の `colorfit-result.webp` から元ファイル名の stem + `.webp` に変更した
+
+### 変更内容
+
+Result の「画像を書き出す」で、元のファイル名を引き継ぎつつ拡張子だけ WebP になるようにした。
+
+### 技術的判断
+
+- Frontend の `download` 属性と Backend の `Content-Disposition` の両方を揃える
+- 保存先の Storage Key は従来どおり UUID ベースのままにする
+
+### 結果
+
+- `test.png` → `test.webp`
+- `CHASE!.png` → `CHASE!.webp`
+
+### Next Step
+
+- Phase 10：Settings
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

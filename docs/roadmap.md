@@ -739,16 +739,16 @@ ResultPage
 
 ## 作業項目
 
-- [ ] Original Image表示
-- [ ] Processed Image表示
-- [ ] Before / After
-- [ ] Result情報
-- [ ] Download
-- [ ] Editorへ戻る
-- [ ] Loading
-- [ ] Error
-- [ ] Responsive
-- [ ] Animation
+- [x] Original Image表示
+- [x] Processed Image表示
+- [x] Before / After
+- [x] Result情報
+- [x] Download
+- [x] Editorへ戻る
+- [x] Loading
+- [x] Error
+- [x] Responsive
+- [x] Animation
 
 ---
 

@@ -12,6 +12,8 @@ vi.mock('../src/api/images', () => ({
   deleteImage: vi.fn(),
   processImage: vi.fn(),
   downloadImage: vi.fn(),
+  getImage: vi.fn(),
+  getResult: vi.fn(),
 }))
 
 const uploadImageMock = vi.mocked(uploadImage)

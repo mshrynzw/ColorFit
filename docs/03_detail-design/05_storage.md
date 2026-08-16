@@ -1801,12 +1801,14 @@ Response / Presigned URL
 例えば、
 
 ```text
-colorfit-result.webp
+test.png → test.webp
+CHASE!.png → CHASE!.webp
 ```
 
-などのユーザー向けファイル名を生成する。
+のように、元ファイル名の拡張子だけを `.webp` へ置き換えたユーザー向けファイル名を生成する。
 
 元ファイル名を利用する場合も、安全な文字列へ正規化する。
+使えない場合は `image.webp` とする。
 
 ---
 

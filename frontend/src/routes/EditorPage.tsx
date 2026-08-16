@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
+import { getResult } from '../api/images'
 import { ImagePreview } from '../features/editor/ImagePreview'
 import { ImageUploader } from '../features/editor/ImageUploader'
 import { PaletteEditor } from '../features/editor/PaletteEditor'
@@ -20,7 +22,10 @@ export function EditorPage() {
   usePageTitle(PAGE_TITLES[ROUTES.editor])
   const layoutRef = useRef<HTMLDivElement>(null)
   useEditorEntrance(layoutRef)
-  const { status, image, previewUrl, errorMessage, selectFile, clearImage } =
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const restoreId = searchParams.get('imageId')
+  const { status, image, previewUrl, errorMessage, selectFile, clearImage, restoreFromId } =
     useImageUpload()
   const palette = usePalette()
   const {
@@ -43,9 +48,36 @@ export function EditorPage() {
     palette.validation.ok &&
     !isProcessing
 
+  const hydratePalette = palette.hydrate
+
   useEffect(() => {
     resetProcessing()
   }, [image?.id, resetProcessing])
+
+  useEffect(() => {
+    if (!restoreId || image?.id) {
+      return
+    }
+    void restoreFromId(restoreId)
+    void getResult(restoreId)
+      .then((result) => {
+        if (result.palette && result.strength != null) {
+          hydratePalette({
+            palette: result.palette,
+            strength: result.strength,
+          })
+        }
+      })
+      .catch(() => {
+        // Image restore is enough to continue editing.
+      })
+  }, [hydratePalette, image?.id, restoreFromId, restoreId])
+
+  useEffect(() => {
+    if (processingStatus === 'success' && image) {
+      void navigate(`${ROUTES.result}?imageId=${image.id}`)
+    }
+  }, [image, navigate, processingStatus])
 
   let processHint =
     '設定した配色とデザインの配色に基づいて、画像の色味を自動調整します。'

@@ -22,6 +22,12 @@ export async function uploadImage(file: File): Promise<ImageInfo> {
   return payload.image
 }
 
+export async function getImage(imageId: string): Promise<ImageInfo> {
+  const response = await apiFetch(`/api/images/${imageId}`)
+  const payload = (await response.json()) as ImageResponse
+  return payload.image
+}
+
 export async function deleteImage(imageId: string): Promise<void> {
   await apiFetch(`/api/images/${imageId}`, {
     method: 'DELETE',
@@ -41,7 +47,17 @@ export async function processImage(
   return payload.result
 }
 
-export async function downloadImage(imageId: string): Promise<Blob> {
-  const response = await apiFetch(`/api/images/${imageId}/download`)
+export async function getResult(imageId: string): Promise<ProcessResult> {
+  const response = await apiFetch(`/api/images/${imageId}/result`)
+  const payload = (await response.json()) as ProcessResponse
+  return payload.result
+}
+
+export async function downloadImage(
+  imageId: string,
+  source?: 'original' | 'processed',
+): Promise<Blob> {
+  const query = source === 'original' ? '?source=original' : ''
+  const response = await apiFetch(`/api/images/${imageId}/download${query}`)
   return response.blob()
 }

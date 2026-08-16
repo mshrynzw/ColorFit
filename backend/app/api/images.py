@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, Query, UploadFile
 from fastapi.responses import Response
 
 from app.core.config import Settings, get_settings
@@ -65,9 +65,10 @@ def get_result(
 @router.get("/{image_id}/download")
 def download_image(
     image_id: str,
+    source: str | None = Query(default=None),
     image_service: ImageService = Depends(get_image_service),
 ) -> Response:
-    data, mime_type, filename = image_service.download(image_id)
+    data, mime_type, filename = image_service.download(image_id, source)
     safe_name = filename.replace('"', "").replace("\r", "").replace("\n", "")
     ascii_name = safe_name.encode("ascii", "ignore").decode() or "image"
     return Response(

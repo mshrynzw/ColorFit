@@ -7,7 +7,7 @@ import {
   toAdjustmentPayload,
   validatePalette,
 } from '../lib/validation/palette'
-import type { PaletteColor } from '../types/palette'
+import type { AdjustmentPayload, PaletteColor } from '../types/palette'
 
 export function usePalette() {
   const [colors, setColors] = useState<PaletteColor[]>(() =>
@@ -58,6 +58,23 @@ export function usePalette() {
     [drafts],
   )
 
+  const hydrate = useCallback((payload: AdjustmentPayload) => {
+    setDrafts({})
+    setStrengthState(Math.max(0, Math.min(1, payload.strength)))
+    setColors((current) =>
+      payload.palette.map((item) => {
+        const existing = current.find((color) => color.name === item.name)
+        return {
+          id: existing?.id ?? item.name,
+          name: item.name,
+          label: existing?.label ?? item.name,
+          color: item.color.toUpperCase(),
+          ratio: item.ratio,
+        }
+      }),
+    )
+  }, [])
+
   return {
     colors,
     strength,
@@ -67,5 +84,6 @@ export function usePalette() {
     setColor,
     setRatio,
     setStrength,
+    hydrate,
   }
 }

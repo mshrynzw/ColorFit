@@ -1,5 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.schemas.palette import PaletteColor
+
 
 class ImageInfo(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
@@ -31,6 +33,8 @@ class ProcessResult(BaseModel):
     status: str
     result_url: str = Field(alias="resultUrl")
     original_url: str | None = Field(default=None, alias="originalUrl")
+    palette: list[PaletteColor] | None = None
+    strength: float | None = None
 
 
 class ProcessResponse(BaseModel):

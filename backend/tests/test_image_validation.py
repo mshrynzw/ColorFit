@@ -1,4 +1,4 @@
-from app.utils.filenames import sanitize_filename
+from app.utils.filenames import processed_download_name, sanitize_filename
 from app.utils.image_validation import detect_format_from_signature
 
 
@@ -7,6 +7,14 @@ def test_sanitize_filename_strips_path_and_unsafe_chars() -> None:
     assert sanitize_filename('a<b>.png') == "ab.png"
     assert sanitize_filename("...") == "image"
     assert sanitize_filename(None) == "image"
+
+
+def test_processed_download_name_keeps_stem() -> None:
+    assert processed_download_name("sample.png") == "sample.webp"
+    assert processed_download_name("CHASE!.png") == "CHASE!.webp"
+    assert processed_download_name("archive.tar.png") == "archive.tar.webp"
+    assert processed_download_name("no-ext") == "no-ext.webp"
+    assert processed_download_name(None) == "image.webp"
 
 
 def test_detect_format_from_signature() -> None:

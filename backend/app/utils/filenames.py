@@ -13,3 +13,10 @@ def sanitize_filename(raw: str | None) -> str:
     if not cleaned or cleaned in {".", ".."}:
         return "image"
     return cleaned[:255]
+
+
+def processed_download_name(raw: str | None) -> str:
+    stem = Path(sanitize_filename(raw)).stem.strip(" .")
+    if not stem or stem in {".", ".."}:
+        return "image.webp"
+    return f"{stem}.webp"

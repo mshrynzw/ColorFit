@@ -62,7 +62,15 @@ def test_process_returns_completed_result(image_client: TestClient) -> None:
 
     fetched = image_client.get(f"/api/images/{image_id}/result")
     assert fetched.status_code == 200
-    assert fetched.json()["result"]["resultUrl"] == f"/api/images/{image_id}/download"
+    fetched_result = fetched.json()["result"]
+    assert fetched_result["resultUrl"] == f"/api/images/{image_id}/download"
+    assert fetched_result["strength"] == 0.7
+    assert len(fetched_result["palette"]) == 3
+
+    original = image_client.get(f"/api/images/{image_id}/download?source=original")
+    assert original.status_code == 200
+    assert original.headers["content-type"].startswith("image/png")
+    assert original.content == _solid_png((220, 30, 30))
 
     info = image_client.get(f"/api/images/{image_id}")
     assert info.json()["image"]["status"] == "completed"
@@ -70,7 +78,7 @@ def test_process_returns_completed_result(image_client: TestClient) -> None:
     download = image_client.get(f"/api/images/{image_id}/download")
     assert download.status_code == 200
     assert download.headers["content-type"].startswith("image/webp")
-    assert "colorfit-result.webp" in download.headers["content-disposition"]
+    assert "sample.webp" in download.headers["content-disposition"]
     assert download.content != _solid_png((220, 30, 30))
 
 

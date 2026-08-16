@@ -1179,7 +1179,13 @@ GET /api/images/{imageId}/result
     "imageId": "550e8400-e29b-41d4-a716-446655440000",
     "status": "completed",
     "originalUrl": "/api/images/550e8400-e29b-41d4-a716-446655440000",
-    "resultUrl": "/api/images/550e8400-e29b-41d4-a716-446655440000/download"
+    "resultUrl": "/api/images/550e8400-e29b-41d4-a716-446655440000/download",
+    "palette": [
+      { "name": "primary", "color": "#1E3A5F", "ratio": 60 },
+      { "name": "secondary", "color": "#D8B26E", "ratio": 30 },
+      { "name": "accent", "color": "#F5F1E8", "ratio": 10 }
+    ],
+    "strength": 0.7
   }
 }
 ```
@@ -1236,6 +1242,28 @@ Processed ImageをDownloadする。
 Processed Imageがまだ存在しない場合は Original Image を返す。
 Phase 4では Image Processing 前のため、Original Image が Download 対象になる。
 
+Before / After 比較のために Original が必要な場合：
+
+```http
+GET /api/images/{imageId}/download?source=original
+```
+
+`source` の値：
+
+```text
+未指定 / auto
+↓
+Processed があれば Processed、なければ Original
+
+original
+↓
+常に Original
+
+processed
+↓
+Processed。未生成なら 404
+```
+
 ---
 
 # 69. Download Response
@@ -1243,8 +1271,17 @@ Phase 4では Image Processing 前のため、Original Image が Download 対象
 ```http
 200 OK
 Content-Type: image/webp
-Content-Disposition: attachment; filename="colorfit-result.webp"
+Content-Disposition: attachment; filename="sample.webp"
 ```
+
+Processed Image のファイル名は、元画像のファイル名から拡張子を除いた部分に `.webp` を付けたもの。
+
+```text
+test.png → test.webp
+CHASE!.png → CHASE!.webp
+```
+
+元ファイル名が使えない場合は `image.webp` とする。
 
 実際のOutput FormatはImage Processing設計に従う。
 

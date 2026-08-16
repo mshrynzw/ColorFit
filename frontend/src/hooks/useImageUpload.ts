@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { getErrorMessage } from '../api/client'
-import { deleteImage, uploadImage } from '../api/images'
+import { downloadImage, getImage, deleteImage, uploadImage } from '../api/images'
 import { validateImageFile } from '../lib/validation/imageFile'
 import type { ImageInfo, UploadStatus } from '../types/image'
 
@@ -84,6 +84,31 @@ export function useImageUpload() {
     }
   }, [revokePreview])
 
+  const restoreFromId = useCallback(
+    async (imageId: string) => {
+      if (imageRef.current?.id === imageId && previewUrlRef.current) {
+        return
+      }
+      setErrorMessage(null)
+      setStatus('uploading')
+      try {
+        const info = await getImage(imageId)
+        const blob = await downloadImage(imageId, 'original')
+        const nextUrl = URL.createObjectURL(blob)
+        revokePreview(previewUrlRef.current)
+        previewUrlRef.current = nextUrl
+        imageRef.current = info
+        setPreviewUrl(nextUrl)
+        setImage(info)
+        setStatus('success')
+      } catch (error) {
+        setErrorMessage(getErrorMessage(error))
+        setStatus(imageRef.current ? 'success' : 'error')
+      }
+    },
+    [revokePreview],
+  )
+
   return {
     status,
     image,
@@ -91,5 +116,6 @@ export function useImageUpload() {
     errorMessage,
     selectFile,
     clearImage,
+    restoreFromId,
   }
 }

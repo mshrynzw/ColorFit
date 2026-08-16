@@ -15,7 +15,7 @@ from app.storage.keys import (
     parse_image_id,
     processed_key,
 )
-from app.utils.filenames import sanitize_filename
+from app.utils.filenames import processed_download_name, sanitize_filename
 from app.utils.image_validation import ValidatedImage, validate_image
 
 logger = logging.getLogger(__name__)
@@ -75,14 +75,31 @@ class ImageService:
     def get_info(self, raw_image_id: str) -> ImageDetail:
         return self._load_detail(raw_image_id)
 
-    def download(self, raw_image_id: str) -> tuple[bytes, str, str]:
+    def download(
+        self,
+        raw_image_id: str,
+        source: str | None = None,
+    ) -> tuple[bytes, str, str]:
         detail = self._load_detail(raw_image_id)
         image_id = detail.id
-        if self.storage.exists(processed_key(image_id)):
+        if source not in {None, "", "auto", "original", "processed"}:
+            raise AppError(
+                ErrorCode.INVALID_REQUEST,
+                "ダウンロード対象が正しくありません。",
+                400,
+            )
+        has_processed = self.storage.exists(processed_key(image_id))
+        if source == "processed" and not has_processed:
+            raise AppError(
+                ErrorCode.IMAGE_NOT_FOUND,
+                "処理結果が見つかりません。",
+                404,
+            )
+        if source != "original" and has_processed:
             return (
                 self.storage.get(processed_key(image_id)),
                 "image/webp",
-                "colorfit-result.webp",
+                processed_download_name(detail.filename),
             )
         return (
             self.storage.get(original_key(image_id)),
@@ -98,17 +115,20 @@ class ImageService:
         meta = self._load_meta(detail.id)
         meta["status"] = "completed"
         meta["processedMimeType"] = "image/webp"
+        meta["adjustment"] = {
+            "palette": [item.model_dump() for item in adjustment.palette],
+            "strength": adjustment.strength,
+        }
         self.storage.put(
             meta_key(detail.id),
             json.dumps(meta, ensure_ascii=True).encode("utf-8"),
             "application/json",
         )
         logger.info("image processed id=%s", detail.id)
-        return ProcessResult(
-            image_id=detail.id,
-            status="completed",
+        return self._process_result(
+            detail.id,
+            meta,
             result_url=f"/api/images/{detail.id}/result",
-            original_url=f"/api/images/{detail.id}",
         )
 
     def get_result(self, raw_image_id: str) -> ProcessResult:
@@ -119,11 +139,36 @@ class ImageService:
                 "処理結果が見つかりません。",
                 404,
             )
-        return ProcessResult(
-            image_id=detail.id,
-            status="completed",
+        meta = self._load_meta(detail.id)
+        return self._process_result(
+            detail.id,
+            meta,
             result_url=f"/api/images/{detail.id}/download",
-            original_url=f"/api/images/{detail.id}",
+        )
+
+    def _process_result(
+        self,
+        image_id: str,
+        meta: dict,
+        result_url: str,
+    ) -> ProcessResult:
+        adjustment = meta.get("adjustment")
+        palette = None
+        strength = None
+        if isinstance(adjustment, dict):
+            raw_palette = adjustment.get("palette")
+            raw_strength = adjustment.get("strength")
+            if isinstance(raw_palette, list):
+                palette = raw_palette
+            if isinstance(raw_strength, (int, float)):
+                strength = float(raw_strength)
+        return ProcessResult(
+            image_id=image_id,
+            status="completed",
+            result_url=result_url,
+            original_url=f"/api/images/{image_id}",
+            palette=palette,
+            strength=strength,
         )
 
     def delete(self, raw_image_id: str) -> None:

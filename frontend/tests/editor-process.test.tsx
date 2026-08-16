@@ -4,7 +4,14 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { ColorFitApiError } from '../src/api/client'
-import { deleteImage, downloadImage, processImage, uploadImage } from '../src/api/images'
+import {
+  deleteImage,
+  downloadImage,
+  getImage,
+  getResult,
+  processImage,
+  uploadImage,
+} from '../src/api/images'
 import { appRoutes } from '../src/app/router'
 
 vi.mock('../src/api/images', () => ({
@@ -12,12 +19,16 @@ vi.mock('../src/api/images', () => ({
   deleteImage: vi.fn(),
   processImage: vi.fn(),
   downloadImage: vi.fn(),
+  getImage: vi.fn(),
+  getResult: vi.fn(),
 }))
 
 const uploadImageMock = vi.mocked(uploadImage)
 const deleteImageMock = vi.mocked(deleteImage)
 const processImageMock = vi.mocked(processImage)
 const downloadImageMock = vi.mocked(downloadImage)
+const getImageMock = vi.mocked(getImage)
+const getResultMock = vi.mocked(getResult)
 
 function renderEditor() {
   const router = createMemoryRouter(appRoutes, {
@@ -41,6 +52,8 @@ describe('editor image processing', () => {
     deleteImageMock.mockReset()
     processImageMock.mockReset()
     downloadImageMock.mockReset()
+    getImageMock.mockReset()
+    getResultMock.mockReset()
     uploadImageMock.mockResolvedValue({
       id: '550e8400-e29b-41d4-a716-446655440000',
       filename: 'sample.png',
@@ -57,6 +70,26 @@ describe('editor image processing', () => {
       resultUrl: '/api/images/550e8400-e29b-41d4-a716-446655440000/result',
     })
     downloadImageMock.mockResolvedValue(new Blob(['webp-bytes'], { type: 'image/webp' }))
+    getImageMock.mockResolvedValue({
+      id: '550e8400-e29b-41d4-a716-446655440000',
+      filename: 'sample.png',
+      mimeType: 'image/png',
+      fileSize: 9,
+      width: 32,
+      height: 24,
+      status: 'completed',
+    })
+    getResultMock.mockResolvedValue({
+      imageId: '550e8400-e29b-41d4-a716-446655440000',
+      status: 'completed',
+      resultUrl: '/api/images/550e8400-e29b-41d4-a716-446655440000/download',
+      palette: [
+        { name: 'primary', color: '#1E3A5F', ratio: 60 },
+        { name: 'secondary', color: '#D8B26E', ratio: 30 },
+        { name: 'accent', color: '#F5F1E8', ratio: 10 },
+      ],
+      strength: 0.7,
+    })
   })
 
   it('keeps the process button disabled until an image is uploaded', () => {
@@ -65,7 +98,7 @@ describe('editor image processing', () => {
     expect(screen.getByRole('button', { name: 'ColorFitで調整する' })).toBeDisabled()
   })
 
-  it('processes an uploaded image and updates the preview', async () => {
+  it('processes an uploaded image and opens the result page', async () => {
     const user = userEvent.setup()
     renderEditor()
 
@@ -74,15 +107,12 @@ describe('editor image processing', () => {
 
     await user.click(screen.getByRole('button', { name: 'ColorFitで調整する' }))
 
-    expect(await screen.findByAltText('sample.pngの調整後プレビュー')).toBeInTheDocument()
-    expect(screen.getByText('調整後')).toBeInTheDocument()
+    expect(await screen.findByText('調整が完了しました')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '画像を書き出す' })).toBeInTheDocument()
     expect(processImageMock).toHaveBeenCalledTimes(1)
-    expect(downloadImageMock).toHaveBeenCalledWith(
+    expect(getResultMock).toHaveBeenCalledWith(
       '550e8400-e29b-41d4-a716-446655440000',
     )
-    expect(
-      screen.getByText('調整が完了しました。プレビューに反映しています。'),
-    ).toBeInTheDocument()
   })
 
   it('shows a processing overlay while the api is in flight', async () => {
@@ -114,7 +144,7 @@ describe('editor image processing', () => {
       resultUrl: '/api/images/550e8400-e29b-41d4-a716-446655440000/result',
     })
 
-    expect(await screen.findByAltText('sample.pngの調整後プレビュー')).toBeInTheDocument()
+    expect(await screen.findByText('調整が完了しました')).toBeInTheDocument()
   })
 
   it('shows a processing error without changing the original preview', async () => {

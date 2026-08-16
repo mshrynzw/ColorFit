@@ -27,6 +27,15 @@ pnpm dev
 
 開発サーバーは `http://localhost:5173` で起動します。
 
+主な Route：
+
+```text
+/
+/editor
+/result
+/settings
+```
+
 ## 主なスクリプト
 
 ```bash
@@ -35,4 +44,5 @@ pnpm build
 pnpm preview
 pnpm lint
 pnpm typecheck
+pnpm test
 ```

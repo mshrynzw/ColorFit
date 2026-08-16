@@ -1,5 +1,124 @@
 @import 'tailwindcss';
 
-body {
-  margin: 0;
+@theme {
+  --font-sans: 'Noto Sans JP', 'Zen Kaku Gothic New', sans-serif;
+  --font-heading: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+
+  --color-background: #06070a;
+  --color-surface: #0d0f14;
+  --color-surface-elevated: #14171f;
+  --color-primary: #5eead4;
+  --color-secondary: #9a7dff;
+  --color-accent: #4f8cff;
+  --color-text: #f3f2ee;
+  --color-text-muted: rgb(243 242 238 / 0.68);
+  --color-text-subtle: rgb(243 242 238 / 0.44);
+  --color-border: rgb(255 255 255 / 0.08);
+  --color-border-strong: rgb(255 255 255 / 0.16);
+  --color-glass: rgb(255 255 255 / 0.045);
+  --color-glass-strong: rgb(255 255 255 / 0.08);
+  --color-glass-border: rgb(255 255 255 / 0.12);
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #4f8cff;
+
+  --radius-sm: 0.625rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --header-h: 68px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@utility glass-panel {
+  background: linear-gradient(
+    160deg,
+    var(--color-glass-strong),
+    var(--color-glass)
+  );
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.06) inset,
+    0 30px 80px -30px rgb(0 0 0 / 0.7);
+}
+
+@utility logo-mark {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(120deg, #ffffff, #b9c4ff 45%, #7ee8d0 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  border-radius: var(--radius-sm);
+  background: var(--color-text);
+  color: var(--color-background);
+  padding: 12px 20px;
+}
+
+@utility skip-link-focus {
+  left: 16px;
+  top: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .bg-glow {
+    animation: none !important;
+  }
 }

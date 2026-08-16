@@ -51,6 +51,15 @@ pnpm dev
 
 `http://localhost:5173`
 
+主な Route：
+
+```text
+/
+/editor
+/result
+/settings
+```
+
 ### Backend
 
 ```bash

@@ -1054,6 +1054,47 @@ API Endpoint の正本である `docs/06_api.md` に従い、Phase 1 では `GET
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 2：Frontend基盤
+
+### 作業
+
+- React Router で `/` `/editor` `/result` `/settings` を設定した
+- AppLayout / Header / Footer / Skip Link / Background を実装した
+- Tailwind CSS v4 の `@theme` で Design Token / Theme / Font を設定した
+- Button / Card など UI Component 基盤を追加した
+- GSAP の登録と `useReducedMotion` を追加した
+- Home の Hero / Feature / CTA の土台を実装した
+- Editor / Result / Settings は Empty State の Page 土台とした
+- Vitest で Route / Header / Footer の表示を確認した
+
+### 変更内容
+
+Frontend の基本構造を、4画面が共通 Layout で表示できる状態にした。
+
+### 技術的判断
+
+- UI Reference の Color / Font / Header / Footer を Design Token として Tailwind `@theme` に落とした
+- Home は UI Reference の構成を土台として実装し、Editor / Result / Settings の本機能は後続 Phase に残した
+- Feature 固有ディレクトリ（image / color / editor など）は、空の Placeholder を作らず必要な Phase で追加する
+- GSAP は Header の入場 Animation に使い、`prefers-reduced-motion` では実行しない
+
+### 結果
+
+- 4つの Route が表示できる
+- Header / Footer が全画面で表示される
+- Frontend の lint / typecheck / test / build が通る
+
+### Next Step
+
+- Phase 3：Backend基盤
+- Router / Service / Schema / Error Handling / Logging
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

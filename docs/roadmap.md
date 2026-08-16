@@ -284,18 +284,18 @@ React Applicationの基本構造を完成させる。
 
 ## 作業項目
 
-- [ ] React Router導入
-- [ ] Route設定
-- [ ] Layout作成
-- [ ] Header作成
-- [ ] Footer作成
-- [ ] UI Component基盤
-- [ ] Tailwind CSS設定
-- [ ] Design Token設定
-- [ ] Theme設定
-- [ ] Font設定
-- [ ] Responsive基盤
-- [ ] GSAP基盤
+- [x] React Router導入
+- [x] Route設定
+- [x] Layout作成
+- [x] Header作成
+- [x] Footer作成
+- [x] UI Component基盤
+- [x] Tailwind CSS設定
+- [x] Design Token設定
+- [x] Theme設定
+- [x] Font設定
+- [x] Responsive基盤
+- [x] GSAP基盤
 
 ---
 
@@ -326,15 +326,17 @@ components/
 └── feedback/
 ```
 
+Phase 2 では Layout / UI 基盤を実装した。Feature 固有の `image/` `color/` `editor/` `result/` `settings/` は各機能 Phase で追加する。
+
 ---
 
 ## 完了条件
 
-- [ ] 4つのRouteが表示できる
-- [ ] Headerが表示される
-- [ ] Footerが表示される
-- [ ] Responsive Layoutが動作する
-- [ ] UI Tokenが使用できる
+- [x] 4つのRouteが表示できる
+- [x] Headerが表示される
+- [x] Footerが表示される
+- [x] Responsive Layoutが動作する
+- [x] UI Tokenが使用できる
 
 ---
 

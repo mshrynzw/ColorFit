@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 
-export function useReducedMotion(): boolean {
+import { useSettings } from './useSettings'
+
+export function usePrefersReducedMotion(): boolean {
   const [reducedMotion, setReducedMotion] = useState(false)
 
   useEffect(() => {
@@ -17,4 +19,10 @@ export function useReducedMotion(): boolean {
   }, [])
 
   return reducedMotion
+}
+
+export function useReducedMotion(): boolean {
+  const osReduced = usePrefersReducedMotion()
+  const { settings } = useSettings()
+  return osReduced || settings.reduceMotion || settings.uiAnimation === 'off'
 }

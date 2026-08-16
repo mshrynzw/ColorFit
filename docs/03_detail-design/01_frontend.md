@@ -863,9 +863,16 @@ error
 アニメーション
 ```
 
-設定値はMVPではユーザーセッション内で管理することを基本とする。
+設定値はMVPではFrontendの Local Storage で永続化する。
 
-永続化が必要な設定については、実装方式を別途決定する。
+キー：
+
+```text
+colorfit.settings
+```
+
+画像処理・書き出し形式など、まだ処理へ接続していない項目も保存する。
+実際の画像処理や出力形式への反映は、対応するPhaseで行う。
 
 ---
 
@@ -882,6 +889,7 @@ type Settings = {
   adjustmentStrength: number;
   naturalColorPriority: boolean;
   preserveMetadata: boolean;
+  filenameMode: FilenameMode;
   uiAnimation: AnimationMode;
   processingAnimation: boolean;
   reduceMotion: boolean;

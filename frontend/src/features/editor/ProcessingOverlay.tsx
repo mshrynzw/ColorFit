@@ -1,9 +1,14 @@
 type ProcessingOverlayProps = {
   message: string
   variant: 'upload' | 'process'
+  animated?: boolean
 }
 
-export function ProcessingOverlay({ message, variant }: ProcessingOverlayProps) {
+export function ProcessingOverlay({
+  message,
+  variant,
+  animated = true,
+}: ProcessingOverlayProps) {
   const isProcess = variant === 'process'
 
   return (
@@ -15,7 +20,7 @@ export function ProcessingOverlay({ message, variant }: ProcessingOverlayProps) 
       }
       aria-hidden="true"
     >
-      {isProcess ? (
+      {isProcess && animated ? (
         <>
           <div className="editor-processing-overlay__scanline" aria-hidden="true" />
           <div className="editor-processing-overlay__sweep" aria-hidden="true" />

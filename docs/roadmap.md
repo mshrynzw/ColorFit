@@ -780,12 +780,12 @@ Application Settingsを実装する。
 
 ## 作業項目
 
-- [ ] Settings UI
-- [ ] Theme設定
-- [ ] Animation設定
-- [ ] Processing Settings
-- [ ] About
-- [ ] Local Storage
+- [x] Settings UI
+- [x] Theme設定
+- [x] Animation設定
+- [x] Processing Settings
+- [x] About
+- [x] Local Storage
 
 ---
 

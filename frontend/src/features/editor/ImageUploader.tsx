@@ -2,6 +2,7 @@ import { useId, useRef, useState, type ChangeEvent, type DragEvent, type ReactNo
 
 import { Button } from '../../components/ui/Button'
 import { getButtonClassName } from '../../components/ui/button-styles'
+import { useSettings } from '../../hooks/useSettings'
 import { cn } from '../../lib/cn'
 import { ACCEPT_ATTRIBUTE } from '../../lib/constants/upload'
 import type { UploadStatus } from '../../types/image'
@@ -26,6 +27,7 @@ export function ImageUploader({
   onRemove,
   children,
 }: ImageUploaderProps) {
+  const { settings } = useSettings()
   const inputId = useId()
   const errorId = useId()
   const statusId = useId()
@@ -140,7 +142,11 @@ export function ImageUploader({
         {uploading ? (
           <ProcessingOverlay variant="upload" message="アップロードしています…" />
         ) : overlayMessage ? (
-          <ProcessingOverlay variant="process" message={overlayMessage} />
+          <ProcessingOverlay
+            variant="process"
+            message={overlayMessage}
+            animated={settings.processingAnimation}
+          />
         ) : null}
 
         <input

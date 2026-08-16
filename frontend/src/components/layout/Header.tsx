@@ -1,7 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
+import { SettingsSaveButton } from '../../features/settings/SettingsSaveButton'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useSettings } from '../../hooks/useSettings'
 import { cn } from '../../lib/cn'
 import { PAGE_LABELS, ROUTES } from '../../lib/constants/routes'
 import { getGsap } from '../../lib/gsap'
@@ -22,10 +24,12 @@ const APP_NAV_ITEMS = [
 export function Header() {
   const location = useLocation()
   const reducedMotion = useReducedMotion()
+  const { isDirty } = useSettings()
   const headerRef = useRef<HTMLElement>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuId = useId()
   const isHome = location.pathname === ROUTES.home
+  const isSettings = location.pathname === ROUTES.settings
   const pageLabel =
     location.pathname in PAGE_LABELS
       ? PAGE_LABELS[location.pathname as keyof typeof PAGE_LABELS]
@@ -126,13 +130,18 @@ export function Header() {
                 はじめる
               </ButtonLink>
             </span>
-          ) : location.pathname !== ROUTES.settings ? (
+          ) : isSettings ? (
+            <span className="hidden items-center gap-3 md:inline-flex" data-anim="header-in">
+              {isDirty ? <span className="unsaved-badge">未保存の変更</span> : null}
+              <SettingsSaveButton size="small" />
+            </span>
+          ) : (
             <span className="hidden md:inline-flex" data-anim="header-in">
               <ButtonLink to={ROUTES.settings} variant="ghost" size="small">
                 設定
               </ButtonLink>
             </span>
-          ) : null}
+          )}
 
           <button
             type="button"
@@ -213,6 +222,10 @@ export function Header() {
             <ButtonLink to={ROUTES.editor} className="w-full">
               はじめる
             </ButtonLink>
+          </div>
+        ) : isSettings ? (
+          <div className="px-8 pb-7">
+            <SettingsSaveButton className="w-full" />
           </div>
         ) : null}
       </div>

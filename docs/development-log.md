@@ -1412,6 +1412,40 @@ Result の「画像を書き出す」で、元のファイル名を引き継ぎ�
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 10：Settings
+
+### 作業
+
+- Settings画面をUI Referenceに沿って実装した
+- Theme / Animation / Processing / 書き出し / About を表示するようにした
+- 設定値を Local Storage（`colorfit.settings`）へ保存するようにした
+
+### 変更内容
+
+`/settings` で設定を変更・保存・初期化できるようになった。
+
+### 技術的判断
+
+- Dark ThemeをPrimaryとし、Light / Systemは保存するが表示切替はMVPでは行わない
+- 書き出し形式・画質・画像処理オプションはUIと保存のみ。実際のProcessing / Download形式はWebP固定のまま
+- ファイル名の初期値だけはDownloadに反映する。デフォルトは元ファイル名.webp（Phase 9の方針を維持）
+- アニメーション設定と「モーションを減らす」は保存後にUIへ適用する
+
+### 結果
+
+- 未保存の変更表示、保存、初期化確認が動作する
+- OSの Reduced Motion が有効なときは設定トグルを無効化する
+
+### Next Step
+
+- Phase 11：Integration
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

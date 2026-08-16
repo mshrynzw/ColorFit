@@ -26,5 +26,6 @@ describe('processedDownloadName', () => {
     expect(processedDownloadName('archive.tar.png')).toBe('archive.tar.webp')
     expect(processedDownloadName('no-ext')).toBe('no-ext.webp')
     expect(processedDownloadName('')).toBe('image.webp')
+    expect(processedDownloadName('sample.png', 'colorfit')).toBe('sample-colorfit.webp')
   })
 })

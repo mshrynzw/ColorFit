@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { getErrorMessage } from '../../api/client'
 import { downloadImage } from '../../api/images'
 import { Button } from '../../components/ui/Button'
+import { useSettings } from '../../hooks/useSettings'
 import { cn } from '../../lib/cn'
 import { processedDownloadName } from '../../lib/format/filename'
 
@@ -12,6 +13,7 @@ type DownloadButtonProps = {
 }
 
 export function DownloadButton({ imageId, filename }: DownloadButtonProps) {
+  const { settings } = useSettings()
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -23,7 +25,7 @@ export function DownloadButton({ imageId, filename }: DownloadButtonProps) {
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = processedDownloadName(filename)
+      link.download = processedDownloadName(filename, settings.filenameMode)
       document.body.append(link)
       link.click()
       link.remove()

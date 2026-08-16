@@ -679,20 +679,20 @@ EditorPage
 
 ## 作業項目
 
-- [ ] UI Reference再現
-- [ ] Image Upload
-- [ ] Image Preview
-- [ ] Palette入力
+- [x] UI Reference再現
+- [x] Image Upload
+- [x] Image Preview
+- [x] Palette入力
 - [ ] Color追加
 - [ ] Color削除
-- [ ] Ratio入力
-- [ ] Ratio Validation
-- [ ] Strength設定
-- [ ] Processing開始
-- [ ] Loading UI
-- [ ] Error UI
-- [ ] Responsive Design
-- [ ] Animation
+- [x] Ratio入力
+- [x] Ratio Validation
+- [x] Strength設定
+- [x] Processing開始
+- [x] Loading UI
+- [x] Error UI
+- [x] Responsive Design
+- [x] Animation
 
 ---
 

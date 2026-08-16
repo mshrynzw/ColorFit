@@ -25,7 +25,7 @@ export function ProcessingButton({
         aria-busy={loading}
         onClick={onProcess}
       >
-        {loading ? '調整しています…' : 'ColorFitで調整する'}
+        {loading ? '処理中…' : 'ColorFitで調整する'}
       </Button>
       <p
         role={hintIsError ? 'alert' : undefined}

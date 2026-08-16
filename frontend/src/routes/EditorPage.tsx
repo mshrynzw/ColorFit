@@ -1,19 +1,25 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { ImagePreview } from '../features/editor/ImagePreview'
 import { ImageUploader } from '../features/editor/ImageUploader'
 import { PaletteEditor } from '../features/editor/PaletteEditor'
+import { PaletteFlow } from '../features/editor/PaletteFlow'
 import { ProcessingButton } from '../features/editor/ProcessingButton'
 import { StrengthSlider } from '../features/editor/StrengthSlider'
+import { useCyclingMessage } from '../hooks/useCyclingMessage'
+import { useEditorEntrance } from '../hooks/useEditorEntrance'
 import { useImageProcessing } from '../hooks/useImageProcessing'
 import { useImageUpload } from '../hooks/useImageUpload'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { usePalette } from '../hooks/usePalette'
+import { PROCESSING_STATUS_MESSAGES } from '../lib/constants/processing'
 import { PAGE_TITLES, ROUTES } from '../lib/constants/routes'
 import { formatFileSize, formatImageType } from '../lib/format/fileSize'
 
 export function EditorPage() {
   usePageTitle(PAGE_TITLES[ROUTES.editor])
+  const layoutRef = useRef<HTMLDivElement>(null)
+  useEditorEntrance(layoutRef)
   const { status, image, previewUrl, errorMessage, selectFile, clearImage } =
     useImageUpload()
   const palette = usePalette()
@@ -27,6 +33,10 @@ export function EditorPage() {
   const hasImage = Boolean(previewUrl && (image || status === 'uploading'))
   const displayUrl = processedUrl ?? previewUrl
   const isProcessing = processingStatus === 'processing'
+  const processingMessage = useCyclingMessage(
+    PROCESSING_STATUS_MESSAGES,
+    isProcessing,
+  )
   const canProcess =
     Boolean(image) &&
     status === 'success' &&
@@ -46,7 +56,7 @@ export function EditorPage() {
   } else if (isProcessing) {
     processHint = 'ColorFitが画像を解析・調整しています。'
   } else if (processingStatus === 'error' && processingError) {
-    processHint = processingError
+    processHint = `${processingError} 配色を確認して、もう一度お試しください。`
   } else if (processingStatus === 'success') {
     processHint = '調整が完了しました。プレビューに反映しています。'
   }
@@ -57,8 +67,11 @@ export function EditorPage() {
       className="relative z-10 pt-[calc(var(--header-h)+28px)] pb-20"
     >
       <h1 className="sr-only">画像を調整</h1>
-      <div className="editor-layout mx-auto w-full max-w-[1600px] px-5 md:px-7">
-        <div className="editor-panel-design">
+      <div
+        ref={layoutRef}
+        className="editor-layout mx-auto w-full max-w-[1600px] px-5 md:px-7"
+      >
+        <div className="editor-panel-design" data-anim="panel-left">
           <PaletteEditor
             colors={palette.colors}
             hexValue={palette.hexValue}
@@ -70,7 +83,11 @@ export function EditorPage() {
           />
         </div>
 
-        <section className="editor-panel-canvas" aria-label="画像プレビュー">
+        <section
+          className="editor-panel-canvas"
+          data-anim="panel-canvas"
+          aria-label="画像プレビュー"
+        >
           <p className="mb-4 max-w-2xl text-text-muted">
             {image
               ? processingStatus === 'success'
@@ -82,33 +99,37 @@ export function EditorPage() {
             status={status}
             errorMessage={errorMessage}
             hasImage={hasImage}
-            overlayMessage={isProcessing ? '配色を解析しています…' : null}
+            overlayMessage={processingMessage}
             onSelectFile={(file) => {
               void selectFile(file)
             }}
             onRemove={clearImage}
           >
             {displayUrl ? (
-              <ImagePreview
-                src={displayUrl}
-                alt={
-                  image
-                    ? processedUrl
-                      ? `${image.filename}の調整後プレビュー`
-                      : `${image.filename}のプレビュー`
-                    : '選択した画像のプレビュー'
-                }
-              />
+              <>
+                <PaletteFlow colors={palette.colors} />
+                <ImagePreview
+                  src={displayUrl}
+                  alt={
+                    image
+                      ? processedUrl
+                        ? `${image.filename}の調整後プレビュー`
+                        : `${image.filename}のプレビュー`
+                      : '選択した画像のプレビュー'
+                  }
+                  badge={processedUrl ? '調整後' : undefined}
+                />
+              </>
             ) : null}
           </ImageUploader>
           {image ? (
-            <p className="mt-4 text-sm text-text-subtle">
+            <p className="editor-image-meta mt-4 text-text-subtle">
               <span>
                 {image.width} × {image.height} px
               </span>
-              <span aria-hidden="true"> ・ </span>
+              <span aria-hidden="true">・</span>
               <span>{formatImageType(image.mimeType)}</span>
-              <span aria-hidden="true"> ・ </span>
+              <span aria-hidden="true">・</span>
               <span>{formatFileSize(image.fileSize)}</span>
             </p>
           ) : null}
@@ -126,7 +147,7 @@ export function EditorPage() {
           />
         </section>
 
-        <div className="editor-panel-adjust">
+        <div className="editor-panel-adjust" data-anim="panel-right">
           <StrengthSlider
             value={palette.strength}
             onChange={palette.setStrength}

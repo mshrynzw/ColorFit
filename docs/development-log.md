@@ -1312,6 +1312,41 @@ Phase 7：Image Processing
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 8：Editor
+
+### 作業
+
+- Mobile では Preview → Process → Palette → Strength の順になるよう Grid を直した
+- Processing Overlay（scanline / sweep）とパネル入場の GSAP を追加した
+- 加工後 Preview に「調整後」バッジと Palette Flow を表示した
+- 処理失敗時に次の操作が分かる Error Copy を追加した
+
+### 変更内容
+
+Editor だけで Upload から Process まで、UI Reference に沿った操作感で完走できるようにした。
+
+### 技術的判断
+
+- MVP は 3 色固定のため、Color 追加・削除は実装していない
+- Before / After 比較スライダーと書き出しは Phase 9 に残す
+- 偽の進捗パーセントは出さず、処理中メッセージだけ切り替える
+- Reduced Motion では GSAP と scanline を止める
+
+### 結果
+
+- Desktop は 3 カラム、Tablet は配色と強度が上、Mobile は画像が先頭
+- 処理中は Overlay と「処理中…」で重複実行を防ぐ
+
+### Next Step
+
+- Phase 9：Result（Before / After 比較と Download）
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

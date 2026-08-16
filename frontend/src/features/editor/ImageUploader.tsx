@@ -5,6 +5,7 @@ import { getButtonClassName } from '../../components/ui/button-styles'
 import { cn } from '../../lib/cn'
 import { ACCEPT_ATTRIBUTE } from '../../lib/constants/upload'
 import type { UploadStatus } from '../../types/image'
+import { ProcessingOverlay } from './ProcessingOverlay'
 
 type ImageUploaderProps = {
   status: UploadStatus
@@ -109,7 +110,7 @@ export function ImageUploader({
         ) : (
           <div className="flex flex-1 flex-col gap-3.5 p-3 md:p-4">
             {children}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center gap-2.5">
               <label
                 htmlFor={inputId}
                 className={getButtonClassName({
@@ -136,15 +137,10 @@ export function ImageUploader({
           </div>
         )}
 
-        {overlayMessage || uploading ? (
-          <div
-            className="absolute inset-0 flex items-center justify-center rounded-[inherit] bg-[rgb(6_7_10_/_0.62)]"
-            aria-hidden="true"
-          >
-            <p className="text-sm font-medium text-primary">
-              {overlayMessage ?? 'アップロードしています…'}
-            </p>
-          </div>
+        {uploading ? (
+          <ProcessingOverlay variant="upload" message="アップロードしています…" />
+        ) : overlayMessage ? (
+          <ProcessingOverlay variant="process" message={overlayMessage} />
         ) : null}
 
         <input

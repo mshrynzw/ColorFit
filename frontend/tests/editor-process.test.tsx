@@ -75,6 +75,7 @@ describe('editor image processing', () => {
     await user.click(screen.getByRole('button', { name: 'ColorFitで調整する' }))
 
     expect(await screen.findByAltText('sample.pngの調整後プレビュー')).toBeInTheDocument()
+    expect(screen.getByText('調整後')).toBeInTheDocument()
     expect(processImageMock).toHaveBeenCalledTimes(1)
     expect(downloadImageMock).toHaveBeenCalledWith(
       '550e8400-e29b-41d4-a716-446655440000',
@@ -82,6 +83,38 @@ describe('editor image processing', () => {
     expect(
       screen.getByText('調整が完了しました。プレビューに反映しています。'),
     ).toBeInTheDocument()
+  })
+
+  it('shows a processing overlay while the api is in flight', async () => {
+    const user = userEvent.setup()
+    let resolveProcess: (value: {
+      imageId: string
+      status: string
+      resultUrl: string
+    }) => void = () => {}
+    processImageMock.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolveProcess = resolve
+        }),
+    )
+    renderEditor()
+
+    await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
+    expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'ColorFitで調整する' }))
+
+    expect(await screen.findByRole('button', { name: '処理中…' })).toBeDisabled()
+    expect(screen.getAllByText('配色を解析しています…').length).toBeGreaterThan(0)
+
+    resolveProcess({
+      imageId: '550e8400-e29b-41d4-a716-446655440000',
+      status: 'completed',
+      resultUrl: '/api/images/550e8400-e29b-41d4-a716-446655440000/result',
+    })
+
+    expect(await screen.findByAltText('sample.pngの調整後プレビュー')).toBeInTheDocument()
   })
 
   it('shows a processing error without changing the original preview', async () => {
@@ -102,6 +135,9 @@ describe('editor image processing', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
       '画像の処理に失敗しました。',
+    )
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'もう一度お試しください。',
     )
     expect(screen.getByAltText('sample.pngのプレビュー')).toBeInTheDocument()
     await waitFor(() => {

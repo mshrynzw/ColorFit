@@ -1,8 +1,9 @@
 # ColorFit
 
 Webデザイナー向けの画像カラー調整Webアプリケーションです。
-
 Webデザインの配色と配色比率を入力すると、そのデザインに馴染むように画像の色調を調整します。
+
+<img width="1920" height="911" alt="image" src="https://github.com/user-attachments/assets/1185148f-11a3-4219-a141-c675f9b9de26" />
 
 ## 技術スタック
 

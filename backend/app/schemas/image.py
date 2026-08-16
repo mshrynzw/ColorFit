@@ -22,3 +22,16 @@ class ImageDetail(ImageInfo):
 
 class ImageDetailResponse(BaseModel):
     image: ImageDetail
+
+
+class ProcessResult(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    image_id: str = Field(alias="imageId")
+    status: str
+    result_url: str = Field(alias="resultUrl")
+    original_url: str | None = Field(default=None, alias="originalUrl")
+
+
+class ProcessResponse(BaseModel):
+    result: ProcessResult

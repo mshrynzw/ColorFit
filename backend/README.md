@@ -36,7 +36,9 @@ Development の画像保存先は `STORAGE_BACKEND=local`（既定）で、`STOR
 
 ```text
 POST   /api/images
+POST   /api/images/{imageId}/process
 GET    /api/images/{imageId}
+GET    /api/images/{imageId}/result
 GET    /api/images/{imageId}/download
 DELETE /api/images/{imageId}
 ```

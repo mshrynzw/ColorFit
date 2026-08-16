@@ -6,21 +6,21 @@ export const DEFAULT_PALETTE = [
     name: 'primary',
     label: 'メインカラー',
     color: '#1E3A5F',
-    ratio: 60,
+    ratio: 75,
   },
   {
     id: 'secondary',
     name: 'secondary',
     label: 'サブカラー',
     color: '#D8B26E',
-    ratio: 30,
+    ratio: 20,
   },
   {
     id: 'accent',
     name: 'accent',
     label: 'アクセントカラー',
     color: '#F5F1E8',
-    ratio: 10,
+    ratio: 5,
   },
 ] as const
 

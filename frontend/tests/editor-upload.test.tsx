@@ -10,6 +10,8 @@ import { appRoutes } from '../src/app/router'
 vi.mock('../src/api/images', () => ({
   uploadImage: vi.fn(),
   deleteImage: vi.fn(),
+  processImage: vi.fn(),
+  downloadImage: vi.fn(),
 }))
 
 const uploadImageMock = vi.mocked(uploadImage)

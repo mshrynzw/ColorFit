@@ -10,6 +10,7 @@ type ImageUploaderProps = {
   status: UploadStatus
   errorMessage: string | null
   hasImage: boolean
+  overlayMessage?: string | null
   onSelectFile: (file: File) => void
   onRemove?: () => void
   children?: ReactNode
@@ -19,6 +20,7 @@ export function ImageUploader({
   status,
   errorMessage,
   hasImage,
+  overlayMessage = null,
   onSelectFile,
   onRemove,
   children,
@@ -29,7 +31,8 @@ export function ImageUploader({
   const dragCount = useRef(0)
   const [isDragOver, setIsDragOver] = useState(false)
   const uploading = status === 'uploading'
-  const showEmpty = !hasImage && !uploading
+  const busy = uploading || Boolean(overlayMessage)
+  const showEmpty = !hasImage && !busy
 
   function handleFiles(files: FileList | null) {
     const file = files?.[0]
@@ -67,7 +70,7 @@ export function ImageUploader({
     event.preventDefault()
     dragCount.current = 0
     setIsDragOver(false)
-    if (!uploading) {
+    if (!busy) {
       handleFiles(event.dataTransfer.files)
     }
   }
@@ -112,7 +115,7 @@ export function ImageUploader({
                 className={getButtonClassName({
                   variant: 'ghost',
                   size: 'small',
-                  className: cn('cursor-pointer', uploading && 'pointer-events-none opacity-50'),
+                  className: cn('cursor-pointer', busy && 'pointer-events-none opacity-50'),
                 })}
               >
                 画像を変更
@@ -121,7 +124,7 @@ export function ImageUploader({
                 <Button
                   variant="ghost"
                   size="small"
-                  disabled={uploading}
+                  disabled={busy}
                   onClick={() => {
                     void onRemove()
                   }}
@@ -133,12 +136,14 @@ export function ImageUploader({
           </div>
         )}
 
-        {uploading ? (
+        {overlayMessage || uploading ? (
           <div
             className="absolute inset-0 flex items-center justify-center rounded-[inherit] bg-[rgb(6_7_10_/_0.62)]"
             aria-hidden="true"
           >
-            <p className="text-sm font-medium text-primary">アップロードしています…</p>
+            <p className="text-sm font-medium text-primary">
+              {overlayMessage ?? 'アップロードしています…'}
+            </p>
           </div>
         ) : null}
 
@@ -149,13 +154,13 @@ export function ImageUploader({
           accept={ACCEPT_ATTRIBUTE}
           aria-label="画像ファイルを選択"
           aria-describedby={errorMessage ? errorId : undefined}
-          disabled={uploading}
+          disabled={busy}
           onChange={handleChange}
         />
       </section>
 
       <p id={statusId} className="sr-only" role="status" aria-live="polite">
-        {uploading ? 'アップロードしています' : hasImage ? '画像をアップロードしました' : ''}
+        {busy ? overlayMessage ?? 'アップロードしています' : hasImage ? '画像をアップロードしました' : ''}
       </p>
 
       {errorMessage ? (

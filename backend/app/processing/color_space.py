@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import numpy as np
+
 # D65 reference white
 _XN = 0.95047
 _YN = 1.00000
@@ -104,3 +106,60 @@ def lerp_lab(
 
 def rgb_to_hex(rgb: tuple[int, int, int]) -> str:
     return f"#{rgb[0]:02X}{rgb[1]:02X}{rgb[2]:02X}"
+
+
+def rgb_array_to_lab(rgb: np.ndarray) -> np.ndarray:
+    pixels = np.asarray(rgb, dtype=np.float64) / 255.0
+    linear = np.where(
+        pixels <= 0.04045,
+        pixels / 12.92,
+        ((pixels + 0.055) / 1.055) ** 2.4,
+    )
+    matrix = np.array(
+        [
+            [0.4124564, 0.3575761, 0.1804375],
+            [0.2126729, 0.7151522, 0.0721750],
+            [0.0193339, 0.1191920, 0.9503041],
+        ],
+        dtype=np.float64,
+    )
+    xyz = linear @ matrix.T
+    xyz_n = xyz / np.array([_XN, _YN, _ZN], dtype=np.float64)
+    f = np.where(
+        xyz_n > _DELTA_CUBE,
+        np.cbrt(xyz_n),
+        xyz_n / (3 * _DELTA**2) + 4 / 29,
+    )
+    return np.stack(
+        [
+            116 * f[..., 1] - 16,
+            500 * (f[..., 0] - f[..., 1]),
+            200 * (f[..., 1] - f[..., 2]),
+        ],
+        axis=-1,
+    )
+
+
+def lab_array_to_rgb(lab: np.ndarray) -> np.ndarray:
+    values = np.asarray(lab, dtype=np.float64)
+    fy = (values[..., 0] + 16) / 116
+    fx = fy + values[..., 1] / 500
+    fz = fy - values[..., 2] / 200
+    f = np.stack([fx, fy, fz], axis=-1)
+    xyz_n = np.where(f > _DELTA, f**3, 3 * _DELTA**2 * (f - 4 / 29))
+    xyz = xyz_n * np.array([_XN, _YN, _ZN], dtype=np.float64)
+    matrix = np.array(
+        [
+            [3.2404542, -1.5371385, -0.4985314],
+            [-0.9692660, 1.8760108, 0.0415560],
+            [0.0556434, -0.2040259, 1.0572252],
+        ],
+        dtype=np.float64,
+    )
+    linear = xyz @ matrix.T
+    srgb = np.where(
+        linear <= 0.0031308,
+        12.92 * linear,
+        1.055 * np.power(np.clip(linear, 0, None), 1 / 2.4) - 0.055,
+    )
+    return np.clip(np.rint(srgb * 255.0), 0, 255).astype(np.uint8)

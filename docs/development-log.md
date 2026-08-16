@@ -1276,6 +1276,42 @@ Phase 6：Color Matching
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 7：Image Processing
+
+### 作業
+
+- NumPy による画素一括の Color Matching 変換を追加した
+- `POST /api/images/{imageId}/process` と `GET /api/images/{imageId}/result` を実装した
+- Processed Image を WebP として保存し、Download 時に返すようにした
+- Editor に「ColorFitで調整する」ボタンと加工後 Preview を接続した
+
+### 変更内容
+
+指定した Palette / Ratio / Strength で Original Image を変換し、Processed Image を生成できるようになった。
+
+### 技術的判断
+
+- 画素ループではなく NumPy で Lab 距離・比率ウェイト・Strength 補間を一括計算する
+- 出力は WebP。Alpha は RGB と分離して維持し、EXIF は Orientation 補正後に引き継がない
+- Processing は MVP では同期実行する。POST の `resultUrl` は API 仕様どおり `/result`、画像本体は `/download`
+- Editor の Before / After 比較と Result 画面は Phase 9 に残す
+
+### 結果
+
+- Strength 0 では平均色がほぼ変わらない
+- Strength を上げると画像色が Palette 側へ寄る
+- 不正な Palette / 存在しない Image は既存の Validation / 404 を返す
+
+### Next Step
+
+- Phase 8：Editor の UI Reference 再現と Loading / Error / Responsive の仕上げ
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

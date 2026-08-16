@@ -3,7 +3,8 @@ from fastapi.responses import Response
 
 from app.core.config import Settings, get_settings
 from app.core.exceptions import AppError, ErrorCode
-from app.schemas.image import ImageDetailResponse, ImageUploadResponse
+from app.schemas.image import ImageDetailResponse, ImageUploadResponse, ProcessResponse
+from app.schemas.palette import AdjustmentInput
 from app.services.image_service import ImageService
 from app.services.storage_service import StorageService
 from app.storage.factory import get_storage_backend
@@ -42,6 +43,23 @@ def get_image(
     image_service: ImageService = Depends(get_image_service),
 ) -> ImageDetailResponse:
     return ImageDetailResponse(image=image_service.get_info(image_id))
+
+
+@router.post("/{image_id}/process", response_model=ProcessResponse)
+def process_image(
+    image_id: str,
+    body: AdjustmentInput,
+    image_service: ImageService = Depends(get_image_service),
+) -> ProcessResponse:
+    return ProcessResponse(result=image_service.process(image_id, body))
+
+
+@router.get("/{image_id}/result", response_model=ProcessResponse)
+def get_result(
+    image_id: str,
+    image_service: ImageService = Depends(get_image_service),
+) -> ProcessResponse:
+    return ProcessResponse(result=image_service.get_result(image_id))
 
 
 @router.get("/{image_id}/download")

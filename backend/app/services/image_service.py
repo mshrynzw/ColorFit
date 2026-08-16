@@ -5,7 +5,9 @@ from uuid import uuid4
 
 from app.core.config import Settings
 from app.core.exceptions import AppError, ErrorCode
-from app.schemas.image import ImageDetail, ImageInfo
+from app.processing.transformer import transform_image
+from app.schemas.image import ImageDetail, ImageInfo, ProcessResult
+from app.schemas.palette import AdjustmentInput
 from app.services.storage_service import StorageService
 from app.storage.keys import (
     meta_key,
@@ -77,11 +79,10 @@ class ImageService:
         detail = self._load_detail(raw_image_id)
         image_id = detail.id
         if self.storage.exists(processed_key(image_id)):
-            extension = _extension_for_mime(detail.mime_type)
             return (
                 self.storage.get(processed_key(image_id)),
-                detail.mime_type,
-                f"colorfit-result{extension}",
+                "image/webp",
+                "colorfit-result.webp",
             )
         return (
             self.storage.get(original_key(image_id)),
@@ -89,9 +90,49 @@ class ImageService:
             detail.filename,
         )
 
+    def process(self, raw_image_id: str, adjustment: AdjustmentInput) -> ProcessResult:
+        detail = self._load_detail(raw_image_id)
+        original = self.storage.get(original_key(detail.id))
+        processed = transform_image(original, adjustment)
+        self.storage.put(processed_key(detail.id), processed, "image/webp")
+        meta = self._load_meta(detail.id)
+        meta["status"] = "completed"
+        meta["processedMimeType"] = "image/webp"
+        self.storage.put(
+            meta_key(detail.id),
+            json.dumps(meta, ensure_ascii=True).encode("utf-8"),
+            "application/json",
+        )
+        logger.info("image processed id=%s", detail.id)
+        return ProcessResult(
+            image_id=detail.id,
+            status="completed",
+            result_url=f"/api/images/{detail.id}/result",
+            original_url=f"/api/images/{detail.id}",
+        )
+
+    def get_result(self, raw_image_id: str) -> ProcessResult:
+        detail = self._load_detail(raw_image_id)
+        if not self.storage.exists(processed_key(detail.id)):
+            raise AppError(
+                ErrorCode.IMAGE_NOT_FOUND,
+                "処理結果が見つかりません。",
+                404,
+            )
+        return ProcessResult(
+            image_id=detail.id,
+            status="completed",
+            result_url=f"/api/images/{detail.id}/download",
+            original_url=f"/api/images/{detail.id}",
+        )
+
     def delete(self, raw_image_id: str) -> None:
         image_id = parse_image_id(raw_image_id)
         self.storage.delete_image(image_id)
+
+    def _load_meta(self, image_id: str) -> dict:
+        raw_meta = self.storage.get(meta_key(image_id))
+        return json.loads(raw_meta.decode("utf-8"))
 
     def _load_detail(self, raw_image_id: str) -> ImageDetail:
         image_id = parse_image_id(raw_image_id)
@@ -174,11 +215,3 @@ def _meta_bytes(
         "createdAt": created_at.isoformat(),
     }
     return json.dumps(payload, ensure_ascii=True).encode("utf-8")
-
-
-def _extension_for_mime(mime_type: str) -> str:
-    return {
-        "image/jpeg": ".jpg",
-        "image/png": ".png",
-        "image/webp": ".webp",
-    }.get(mime_type, "")

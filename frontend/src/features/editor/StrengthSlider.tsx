@@ -12,7 +12,10 @@ export function StrengthSlider({ value, onChange }: StrengthSliderProps) {
         <h2 className="text-[17px] font-bold">画像を調整</h2>
         <div className="mt-6">
           <div className="mb-3 flex items-center justify-between">
-            <label htmlFor="strength-slider" className="text-[13.5px] font-medium text-text-muted">
+            <label
+              htmlFor="strength-slider"
+              className="text-[13.5px] font-medium text-text-muted"
+            >
               適用強度
             </label>
             <span className="text-[12.5px] text-text-subtle">{percent}%</span>
@@ -38,7 +41,7 @@ export function StrengthSlider({ value, onChange }: StrengthSliderProps) {
             <span>強い</span>
           </div>
           <p className="mt-4 text-[13px] leading-relaxed text-text-subtle">
-            0は色を変えず、1はデザインの配色へ最も強く寄せます。
+            0%は色を変えず、100%はデザインの配色へ最も強く寄せます。
           </p>
         </div>
       </div>

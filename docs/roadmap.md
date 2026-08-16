@@ -637,14 +637,14 @@ POST /api/images/{imageId}/process
 
 ## 作業項目
 
-- [ ] Image Load
-- [ ] Image Analysis
-- [ ] Palette Mapping
-- [ ] Ratio Mapping
-- [ ] Strength適用
-- [ ] Image Generation
-- [ ] Output保存
-- [ ] Error Handling
+- [x] Image Load
+- [x] Image Analysis
+- [x] Palette Mapping
+- [x] Ratio Mapping
+- [x] Strength適用
+- [x] Image Generation
+- [x] Output保存
+- [x] Error Handling
 
 ---
 

@@ -13,6 +13,7 @@ type ImageUploaderProps = {
   errorMessage: string | null
   hasImage: boolean
   overlayMessage?: string | null
+  busyMessage?: string
   onSelectFile: (file: File) => void
   onRemove?: () => void
   children?: ReactNode
@@ -23,6 +24,7 @@ export function ImageUploader({
   errorMessage,
   hasImage,
   overlayMessage = null,
+  busyMessage = 'アップロードしています…',
   onSelectFile,
   onRemove,
   children,
@@ -140,7 +142,7 @@ export function ImageUploader({
         )}
 
         {uploading ? (
-          <ProcessingOverlay variant="upload" message="アップロードしています…" />
+          <ProcessingOverlay variant="upload" message={busyMessage} />
         ) : overlayMessage ? (
           <ProcessingOverlay
             variant="process"
@@ -162,7 +164,7 @@ export function ImageUploader({
       </section>
 
       <p id={statusId} className="sr-only" role="status" aria-live="polite">
-        {busy ? overlayMessage ?? 'アップロードしています' : hasImage ? '画像をアップロードしました' : ''}
+        {busy ? overlayMessage ?? busyMessage : hasImage ? '画像をアップロードしました' : ''}
       </p>
 
       {errorMessage ? (

@@ -50,7 +50,7 @@ export function ResultPage() {
 
   if (result.status === 'loading') {
     return (
-      <EmptyResult title="調整結果" message="調整結果を読み込んでいます…" />
+      <EmptyResult title="調整結果" message="調整結果を読み込んでいます…" busy />
     )
   }
 
@@ -126,15 +126,26 @@ export function ResultPage() {
   )
 }
 
-function EmptyResult({ title, message }: { title: string; message: string }) {
+function EmptyResult({
+  title,
+  message,
+  busy = false,
+}: {
+  title: string
+  message: string
+  busy?: boolean
+}) {
   return (
     <main
       id="main"
       className="relative z-10 pt-[calc(var(--header-h)+48px)] pb-20"
+      aria-busy={busy}
     >
       <div className="mx-auto max-w-[720px] px-5 md:px-8">
         <h1 className="font-heading text-3xl font-bold md:text-4xl">{title}</h1>
-        <p className="mt-4 max-w-2xl text-text-muted">{message}</p>
+        <p className="mt-4 max-w-2xl text-text-muted" role={busy ? 'status' : undefined}>
+          {message}
+        </p>
         <div className="mt-8">
           <ButtonLink to={ROUTES.editor}>エディターへ戻る</ButtonLink>
         </div>

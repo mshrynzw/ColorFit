@@ -1446,6 +1446,39 @@ Phase 10：Settings
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 11：Integration
+
+### 作業
+
+- Core User Flow（Upload → Process → Result → Download → Editor復帰）の接続を確認した
+- 予期しない Render Error 用の Error Boundary を追加した
+- Result の Loading と Editor 復帰時の読み込み表示を揃えた
+
+### 変更内容
+
+Frontend / Backend / Storage / Image Processing をつないだ一連の操作を、通しの Integration Test で確認できるようにした。
+
+### 技術的判断
+
+- 各Phaseで接続済みの API を新たに作り直さず、抜けていた Error / Loading を補う
+- Error Boundary は API Error と分離し、Header / Footer は残す
+- Result から Editor へ戻るときの読み込みは「アップロードしています」ではなく「画像を読み込んでいます」と出す
+
+### 結果
+
+- Home から Download、再調整までの Flow Test が通る
+- Render Error 時は再読み込みの Fallback を出す
+
+### Next Step
+
+- Phase 12：Testing
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

@@ -30,11 +30,15 @@ const downloadImageMock = vi.mocked(downloadImage)
 const getImageMock = vi.mocked(getImage)
 const getResultMock = vi.mocked(getResult)
 
-function renderEditor() {
+function renderEditor(path = '/editor') {
   const router = createMemoryRouter(appRoutes, {
-    initialEntries: ['/editor'],
+    initialEntries: [path],
   })
   return render(<RouterProvider router={router} />)
+}
+
+function renderEditorWithId() {
+  return renderEditor('/editor?imageId=550e8400-e29b-41d4-a716-446655440000')
 }
 
 function pngFile(name = 'sample.png') {
@@ -173,5 +177,42 @@ describe('editor image processing', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'ColorFitで調整する' })).toBeEnabled()
     })
+  })
+
+  it('restores the original image from a result id', async () => {
+    let resolveImage: (value: {
+      id: string
+      filename: string
+      mimeType: string
+      fileSize: number
+      width: number
+      height: number
+      status: string
+    }) => void = () => {}
+    getImageMock.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolveImage = resolve
+        }),
+    )
+    renderEditorWithId()
+
+    expect(
+      (await screen.findAllByText('画像を読み込んでいます…')).length,
+    ).toBeGreaterThan(0)
+    resolveImage({
+      id: '550e8400-e29b-41d4-a716-446655440000',
+      filename: 'sample.png',
+      mimeType: 'image/png',
+      fileSize: 9,
+      width: 32,
+      height: 24,
+      status: 'completed',
+    })
+    expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()
+    expect(downloadImageMock).toHaveBeenCalledWith(
+      '550e8400-e29b-41d4-a716-446655440000',
+      'original',
+    )
   })
 })

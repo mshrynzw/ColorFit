@@ -127,4 +127,24 @@ describe('result page', () => {
     expect(await screen.findByText('処理結果が見つかりません。')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'エディターへ戻る' })).toBeInTheDocument()
   })
+
+  it('shows a loading state while the result is fetched', () => {
+    getResultMock.mockImplementation(() => new Promise(() => {}))
+    renderResult('/result?imageId=550e8400-e29b-41d4-a716-446655440000')
+
+    expect(screen.getByText('調整結果を読み込んでいます…')).toBeInTheDocument()
+    expect(screen.getByRole('main')).toHaveAttribute('aria-busy', 'true')
+  })
+
+  it('shows an error when download fails', async () => {
+    const user = userEvent.setup()
+    renderResult('/result?imageId=550e8400-e29b-41d4-a716-446655440000')
+    expect(await screen.findByText('調整が完了しました')).toBeInTheDocument()
+
+    downloadImageMock.mockRejectedValueOnce(
+      new ColorFitApiError('STORAGE_DOWNLOAD_FAILED', '画像を取得できませんでした。', 503),
+    )
+    await user.click(screen.getByRole('button', { name: '画像を書き出す' }))
+    expect(await screen.findByText('画像を取得できませんでした。')).toBeInTheDocument()
+  })
 })

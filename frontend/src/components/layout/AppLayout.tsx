@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 
 import { SettingsProvider } from '../../hooks/useSettings'
+import { ErrorBoundary } from '../feedback/ErrorBoundary'
 import { BackgroundLayer } from './BackgroundLayer'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -13,7 +14,9 @@ export function AppLayout() {
         <BackgroundLayer />
         <SkipLink />
         <Header />
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
         <Footer />
       </div>
     </SettingsProvider>

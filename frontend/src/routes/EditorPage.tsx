@@ -35,6 +35,7 @@ export function EditorPage() {
     process,
     reset: resetProcessing,
   } = useImageProcessing()
+  const restoring = Boolean(restoreId) && !image && status === 'uploading'
   const hasImage = Boolean(previewUrl && (image || status === 'uploading'))
   const displayUrl = processedUrl ?? previewUrl
   const isProcessing = processingStatus === 'processing'
@@ -132,6 +133,9 @@ export function EditorPage() {
             errorMessage={errorMessage}
             hasImage={hasImage}
             overlayMessage={processingMessage}
+            busyMessage={
+              restoring ? '画像を読み込んでいます…' : 'アップロードしています…'
+            }
             onSelectFile={(file) => {
               void selectFile(file)
             }}

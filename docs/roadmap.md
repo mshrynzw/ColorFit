@@ -845,12 +845,12 @@ Result
 
 ## 作業項目
 
-- [ ] Upload Integration
-- [ ] Processing Integration
-- [ ] Result Integration
-- [ ] Download Integration
-- [ ] Error Integration
-- [ ] Loading Integration
+- [x] Upload Integration
+- [x] Processing Integration
+- [x] Result Integration
+- [x] Download Integration
+- [x] Error Integration
+- [x] Loading Integration
 
 ---
 

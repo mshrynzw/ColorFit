@@ -1656,6 +1656,95 @@ Phase 15 後の Production 修正（メモリ / 画像サイズ / Deploy 手順�
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 16：MVP Release
+
+### 作業
+
+- Vercel / Render / Cloudflare R2 の Production で Core User Flow を確認した
+- Phase 16 の Release Checklist を完了とし、v0.1.0 として記録した
+
+### 変更内容
+
+本番 URL で Upload → Palette → Ratio → Strength → Processing → Result → Download が動作することを確認し、MVP Release を完了した。
+
+### 技術的判断
+
+- Hosting は Frontend=Vercel、Backend=Render、Storage=Cloudflare R2 の無料枠で公開する
+- 画像最大 512 × 512px とチャンク分割により、Render 無料枠でも Processing が完了する
+- 手動調整（色温度など）と調整プリセットは P2 として残す
+- 書き出し実体は WebP 固定のままとする
+
+### 結果
+
+- Production で MVP の Core User Flow が通る
+- Secret は Environment Variable で管理し、Git には含めない
+
+### Next Step
+
+- User Feedback / Bug Fix / UX Improvement（Release 後）
+
+---
+
+## Release v0.1.0
+
+### Date
+
+2026-08-16
+
+### Scope
+
+MVP Release
+
+### Features
+
+- Image Upload
+- Color Palette
+- Ratio
+- Strength
+- Color Matching
+- Image Processing
+- Result
+- Download
+
+### Known Issues
+
+- 画像最大寸法は 512 × 512px
+- Render 無料枠は Sleep / Cold Start がある
+- 書き出し実体は WebP 固定（Settings の JPEG / PNG は未接続）
+- 手動調整（色温度など）と調整プリセットは未実装（P2）
+
+---
+
+### MVP Complete
+
+ColorFit MVPを完成した。
+
+### Core User Flow
+
+Upload
+ ↓
+Palette
+ ↓
+Ratio
+ ↓
+Strength
+ ↓
+Processing
+ ↓
+Result
+ ↓
+Download
+
+### Status
+
+All Core Features Complete.
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。
@@ -1908,19 +1997,19 @@ v0.1.0
 
 # 79. Release Criteria
 
-Release前に以下を確認する。
+Release前に以下を確認する。v0.1.0（2026-08-16）で確認済み。
 
-- [ ] Core User Flowが動作する
-- [ ] Image Uploadが動作する
-- [ ] Color Matchingが動作する
-- [ ] Image Processingが動作する
-- [ ] Resultが表示される
-- [ ] Downloadできる
-- [ ] Critical Bugがない
-- [ ] Security Review完了
-- [ ] Responsive確認
-- [ ] Accessibility確認
-- [ ] Production Build成功
+- [x] Core User Flowが動作する
+- [x] Image Uploadが動作する
+- [x] Color Matchingが動作する
+- [x] Image Processingが動作する
+- [x] Resultが表示される
+- [x] Downloadできる
+- [x] Critical Bugがない
+- [x] Security Review完了
+- [x] Responsive確認
+- [x] Accessibility確認
+- [x] Production Build成功
 
 ---
 

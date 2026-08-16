@@ -167,8 +167,8 @@ Phase 16 MVP Release
 - [x] UI Guideline
 - [x] Screen List
 - [x] UI Reference
-- [ ] Roadmap
-- [ ] Development Log
+- [x] Roadmap
+- [x] Development Log
 
 ---
 
@@ -1143,56 +1143,60 @@ ColorFit MVPを公開する。
 
 ## Release Checklist
 
+2026-08-16 に Vercel / Render / Cloudflare R2 の Production で確認し、完了した。
+
+既知の制約：画像最大 512 × 512px、Render 無料枠の Sleep、書き出し実体は WebP 固定。
+
 ### Frontend
 
-- [ ] Build成功
-- [ ] Route正常
-- [ ] Responsive正常
-- [ ] UI Referenceとの差異確認
-- [ ] Console Errorなし
+- [x] Build成功
+- [x] Route正常
+- [x] Responsive正常
+- [x] UI Referenceとの差異確認
+- [x] Console Errorなし
 
 ### Backend
 
-- [ ] API正常
-- [ ] Health Check正常
-- [ ] Error Handling正常
-- [ ] Logging正常
+- [x] API正常
+- [x] Health Check正常
+- [x] Error Handling正常
+- [x] Logging正常
 
 ### Image Processing
 
-- [ ] Image Processing正常
-- [ ] Color Matching正常
-- [ ] Output Image正常
+- [x] Image Processing正常
+- [x] Color Matching正常
+- [x] Output Image正常
 
 ### Storage
 
-- [ ] Upload正常
-- [ ] Download正常
-- [ ] Access Control正常
+- [x] Upload正常
+- [x] Download正常
+- [x] Access Control正常
 
 ### Security
 
-- [ ] Secretが公開されていない
-- [ ] CORS確認
-- [ ] File Validation確認
+- [x] Secretが公開されていない
+- [x] CORS確認
+- [x] File Validation確認
 
 ### User Flow
 
-- [ ] Home
-- [ ] Editor
-- [ ] Upload
-- [ ] Palette
-- [ ] Ratio
-- [ ] Strength
-- [ ] Processing
-- [ ] Result
-- [ ] Download
+- [x] Home
+- [x] Editor
+- [x] Upload
+- [x] Palette
+- [x] Ratio
+- [x] Strength
+- [x] Processing
+- [x] Result
+- [x] Download
 
 ---
 
 # 31. MVP Release Criteria
 
-以下をすべて満たした場合、MVP Release可能とする。
+以下をすべて満たした場合、MVP Release可能とする。2026-08-16 の Production 確認で満たした。
 
 ```text
 Webデザイン画像をUploadできる

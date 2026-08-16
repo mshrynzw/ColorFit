@@ -568,12 +568,12 @@ Color Matchingの適用強度を指定する。
 
 ## 作業項目
 
-- [ ] Palette Schema
-- [ ] Ratio Validation
-- [ ] Color Validation
-- [ ] Strength Validation
-- [ ] Color Matching AlgorithmのPrototype
-- [ ] Color Matching Unit Test
+- [x] Palette Schema
+- [x] Ratio Validation
+- [x] Color Validation
+- [x] Strength Validation
+- [x] Color Matching AlgorithmのPrototype
+- [x] Color Matching Unit Test
 
 ---
 

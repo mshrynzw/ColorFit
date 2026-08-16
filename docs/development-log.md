@@ -1241,6 +1241,41 @@ Phase 5：Image Upload
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 6：Color Matching
+
+### 作業
+
+- Palette / Ratio / Strength の Schema と Backend Validation を追加した
+- Lab 空間での Color Matching prototype（距離・比率ウェイト・Strength 補間）を追加した
+- Editor に PaletteEditor / RatioEditor / StrengthSlider を追加した
+- Frontend でも HEX / Ratio 合計 100 / Strength 範囲を Validation する
+
+### 変更内容
+
+ユーザーが Web デザインの 3 色と比率・適用強度を入力でき、その値が Backend の Color Matching へ渡せる形になった。
+
+### 技術的判断
+
+- MVP は Primary / Secondary / Accent の 3 色に固定した
+- 色距離は CIEDE2000 ではなく Lab の CIE76 を prototype とした。Phase 7 で画像変換と合わせて精度を上げる
+- `POST /api/images/{imageId}/process` は画像生成を含むため Phase 7 で実装する
+- NumPy は画素一括処理が必要になる Phase 7 まで追加しない
+
+### 結果
+
+- 不正な HEX / 比率合計 / Strength は Backend で 422 になる
+- Strength 0 では入力色が変わらない
+
+### Next Step
+
+- Phase 7：Image Processing（Palette を使った画像変換）
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

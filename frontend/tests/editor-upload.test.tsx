@@ -57,6 +57,8 @@ describe('editor image upload', () => {
       screen.getByText('まだ画像がアップロードされていません。'),
     ).toBeInTheDocument()
     expect(screen.getByText('画像をここにドロップ')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'デザインの配色' })).toBeInTheDocument()
+    expect(screen.getByLabelText('適用強度')).toHaveValue('0.7')
   })
 
   it('uploads a png and shows a preview', async () => {

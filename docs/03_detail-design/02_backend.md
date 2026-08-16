@@ -156,6 +156,11 @@ backend/
 │   │   ├── transformer.py
 │   │   └── presets.py
 │   │
+│   ├── processing/
+│   │   ├── color_space.py
+│   │   ├── matcher.py
+│   │   └── validation.py
+│   │
 │   ├── storage/
 │   │   ├── base.py
 │   │   ├── factory.py

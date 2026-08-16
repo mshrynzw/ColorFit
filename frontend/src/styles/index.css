@@ -122,3 +122,68 @@
     animation: none !important;
   }
 }
+
+@layer components {
+  .color-swatch {
+    appearance: none;
+    background: transparent;
+  }
+
+  .color-swatch::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 999px;
+  }
+
+  .color-swatch::-webkit-color-swatch {
+    border: none;
+    border-radius: 999px;
+  }
+
+  .color-swatch::-moz-color-swatch {
+    border: none;
+    border-radius: 999px;
+  }
+
+  .accent-range {
+    accent-color: var(--color-primary);
+  }
+}
+
+.editor-layout {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'design'
+    'canvas'
+    'adjust';
+}
+
+.editor-panel-design {
+  grid-area: design;
+}
+
+.editor-panel-canvas {
+  grid-area: canvas;
+}
+
+.editor-panel-adjust {
+  grid-area: adjust;
+}
+
+@media (min-width: 768px) {
+  .editor-layout {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'design adjust'
+      'canvas canvas';
+  }
+}
+
+@media (min-width: 1280px) {
+  .editor-layout {
+    grid-template-columns: 300px minmax(0, 1fr) 320px;
+    grid-template-areas: 'design canvas adjust';
+    align-items: start;
+  }
+}

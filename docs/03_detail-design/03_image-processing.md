@@ -200,7 +200,15 @@ MVPでは、FrontendとBackendの両方で同じ制限値を使用する。
 
 を考慮する。
 
-具体的な最大値は実装環境のメモリ使用量を測定したうえで決定する。
+MVP の既定値は次のとおり。Render 無料枠（512MB）での Color Matching メモリ使用量に合わせる。
+
+```text
+MAX_IMAGE_WIDTH=512
+MAX_IMAGE_HEIGHT=512
+MAX_PIXEL_COUNT=262144
+```
+
+値は Environment Variable で変更できる。
 
 ---
 

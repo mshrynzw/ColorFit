@@ -60,6 +60,15 @@ def test_transform_jpeg_input_outputs_webp() -> None:
     assert result.size == (8, 8)
 
 
+def test_chunked_match_agrees_with_single_pass() -> None:
+    rng = np.random.default_rng(0)
+    rgb = rng.integers(0, 256, size=(37, 29, 3), dtype=np.uint8)
+    palette = prepare_palette(sample_input(0.65).palette)
+    single = match_rgb_array(rgb, palette, 0.65, chunk_size=rgb.shape[0] * rgb.shape[1])
+    chunked = match_rgb_array(rgb, palette, 0.65, chunk_size=17)
+    np.testing.assert_array_equal(single, chunked)
+
+
 def test_high_strength_moves_red_toward_palette() -> None:
     image = Image.new("RGB", (8, 8), (220, 30, 30))
     buffer = BytesIO()

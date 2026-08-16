@@ -541,6 +541,8 @@ MAX_IMAGE_WIDTH
 MAX_IMAGE_HEIGHT
 ```
 
+MVP の既定値は 512 × 512 とする。Render 無料枠のメモリ制約に合わせ、Environment Variable で変更できる。
+
 理由：
 
 ```text

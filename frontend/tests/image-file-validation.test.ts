@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { MAX_UPLOAD_SIZE } from '../src/lib/constants/upload'
+import { MAX_IMAGE_WIDTH, MAX_UPLOAD_SIZE } from '../src/lib/constants/upload'
 import { validateImageFile, validateImageFileBasic } from '../src/lib/validation/imageFile'
 
 function createFile(name: string, type: string, size = 16) {
@@ -46,7 +46,7 @@ describe('validateImageFileBasic', () => {
 describe('validateImageFile', () => {
   it('rejects dimensions that are too large', async () => {
     vi.stubGlobal('createImageBitmap', async () => ({
-      width: 9000,
+      width: MAX_IMAGE_WIDTH + 1,
       height: 100,
       close: () => {},
     }))

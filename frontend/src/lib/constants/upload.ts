@@ -1,7 +1,7 @@
 export const MAX_UPLOAD_SIZE = 10 * 1024 * 1024
-export const MAX_IMAGE_WIDTH = 8192
-export const MAX_IMAGE_HEIGHT = 8192
-export const MAX_PIXEL_COUNT = 20_000_000
+export const MAX_IMAGE_WIDTH = 512
+export const MAX_IMAGE_HEIGHT = 512
+export const MAX_PIXEL_COUNT = MAX_IMAGE_WIDTH * MAX_IMAGE_HEIGHT
 
 export const ACCEPTED_MIME_TYPES = [
   'image/jpeg',

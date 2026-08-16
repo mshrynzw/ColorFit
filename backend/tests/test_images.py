@@ -169,6 +169,25 @@ def test_upload_rejects_dimensions_too_large(
     assert response.json()["error"]["code"] == ErrorCode.IMAGE_DIMENSIONS_TOO_LARGE
 
 
+def test_upload_rejects_over_default_max_dimension(image_client: TestClient) -> None:
+    response = image_client.post(
+        "/api/images",
+        files={"file": ("wide.png", _image_bytes("PNG", (513, 8)), "image/png")},
+    )
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == ErrorCode.IMAGE_DIMENSIONS_TOO_LARGE
+
+
+def test_upload_accepts_max_dimension(image_client: TestClient) -> None:
+    response = image_client.post(
+        "/api/images",
+        files={"file": ("max.png", _image_bytes("PNG", (512, 512)), "image/png")},
+    )
+    assert response.status_code == 201
+    assert response.json()["image"]["width"] == 512
+    assert response.json()["image"]["height"] == 512
+
+
 def test_upload_sanitizes_path_filename(image_client: TestClient) -> None:
     payload = _image_bytes("PNG")
     response = image_client.post(

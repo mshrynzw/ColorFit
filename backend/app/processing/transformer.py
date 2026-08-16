@@ -29,24 +29,56 @@ def analyze_rgb(rgb: np.ndarray) -> ImageAnalysis:
     )
 
 
+# Render 無料枠（512MB）でもピークメモリを抑えるため、画素を分割して変換する。
+MATCH_CHUNK_SIZE = 16_384
+
+
 def match_rgb_array(
     rgb: np.ndarray,
     palette: list[PaletteLabColor],
     strength: float,
+    *,
+    chunk_size: int = MATCH_CHUNK_SIZE,
 ) -> np.ndarray:
     if strength <= 0:
         return rgb
+
     flat = rgb.reshape(-1, 3)
-    labs = rgb_array_to_lab(flat)
     palette_labs = np.array([color.lab for color in palette], dtype=np.float64)
     ratios = np.array([color.ratio for color in palette], dtype=np.float64)
-    delta = labs[:, None, :] - palette_labs[None, :, :]
-    distance = np.sqrt(np.sum(delta * delta, axis=2))
+    amount = min(float(strength), 1.0)
+    step = max(int(chunk_size), 1)
+    output = np.empty_like(flat)
+
+    for start in range(0, flat.shape[0], step):
+        chunk = flat[start : start + step]
+        output[start : start + step] = _match_rgb_chunk(
+            chunk,
+            palette_labs,
+            ratios,
+            amount,
+        )
+
+    return output.reshape(rgb.shape)
+
+
+def _match_rgb_chunk(
+    rgb_chunk: np.ndarray,
+    palette_labs: np.ndarray,
+    ratios: np.ndarray,
+    amount: float,
+) -> np.ndarray:
+    labs = rgb_array_to_lab(rgb_chunk)
+    color_count = palette_labs.shape[0]
+    distance = np.empty((labs.shape[0], color_count), dtype=np.float64)
+    for index, color in enumerate(palette_labs):
+        delta = labs - color
+        distance[:, index] = np.sqrt(np.sum(delta * delta, axis=1))
     weights = ratios[None, :] / (distance + 1e-6)
     weights = weights / np.sum(weights, axis=1, keepdims=True)
     target = weights @ palette_labs
-    mixed = labs + (target - labs) * min(strength, 1.0)
-    return lab_array_to_rgb(mixed).reshape(rgb.shape)
+    mixed = labs + (target - labs) * amount
+    return lab_array_to_rgb(mixed)
 
 
 def transform_image(data: bytes, adjustment: AdjustmentInput) -> bytes:

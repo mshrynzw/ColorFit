@@ -1615,6 +1615,47 @@ Production へ公開できる構成ファイルと Environment Variable 方針�
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 15 後の Production 修正（メモリ / 画像サイズ / Deploy 手順）
+
+### 作業
+
+- Production の Color Matching で Render 無料枠（512MB）が OOM になる問題を修正した
+- 画素一括の `(N, palette, 3)` 配列をやめ、チャンク分割と Palette 色ごとの距離計算に変更した
+- 画像の最大寸法を 512 × 512px（総画素 262,144）に揃えた
+- 実 Deploy で通った Vercel Output Directory と R2 作成手順を `docs/10_deployment.md` に反映した
+
+### 問題
+
+1254 × 1254 程度の PNG で Upload は成功するが、`POST /api/images/{imageId}/process` 開始直後に Render プロセスが落ち、結果画面へ遷移しなかった。R2 に `processed` が残らない。
+
+### 原因
+
+`match_rgb_array` が全画素 × Palette 色 × チャンネルの巨大配列を一度に確保していた。Render 無料枠 512MB を超えて OOM になっていた。
+
+あわせて、Vercel では Root Directory が `frontend` なのに Output Directory を `frontend/dist` にすると、実体は `frontend/frontend/dist` を探し Deploy が失敗する。
+
+### 技術的判断
+
+- Render を有料化せず、アルゴリズム側でピークメモリを抑える
+- 無料枠に合わせ、Production / Development とも最大 512 × 512px とする
+- Vercel の Output Directory は Root からの相対パス `dist`（または Override OFF）とする
+- R2 は Public access OFF のまま、画像は Backend API 経由のみとする
+
+### 結果
+
+- チャンク分割後も画素ごとの計算は既存の Color Matching と一致する
+- 512 × 512 を超える画像は Frontend / Backend の両方で拒否する
+
+### Next Step
+
+- Phase 16：MVP Release（通し確認）
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

@@ -14,9 +14,9 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     cors_origins: str = "http://localhost:5173"
     max_upload_size: int = 10 * 1024 * 1024
-    max_image_width: int = 8192
-    max_image_height: int = 8192
-    max_pixel_count: int = 20_000_000
+    max_image_width: int = 512
+    max_image_height: int = 512
+    max_pixel_count: int = 512 * 512
     image_ttl_hours: int = 24
     storage_backend: str = "local"
     storage_local_path: str = "./data/storage"

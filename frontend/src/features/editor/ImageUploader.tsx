@@ -4,7 +4,11 @@ import { Button } from '../../components/ui/Button'
 import { getButtonClassName } from '../../components/ui/button-styles'
 import { useSettings } from '../../hooks/useSettings'
 import { cn } from '../../lib/cn'
-import { ACCEPT_ATTRIBUTE } from '../../lib/constants/upload'
+import {
+  ACCEPT_ATTRIBUTE,
+  MAX_IMAGE_HEIGHT,
+  MAX_IMAGE_WIDTH,
+} from '../../lib/constants/upload'
 import type { UploadStatus } from '../../types/image'
 import { ProcessingOverlay } from './ProcessingOverlay'
 
@@ -109,7 +113,9 @@ export function ImageUploader({
             >
               画像を選択
             </label>
-            <p className="mt-2.5 text-xs text-text-subtle">対応形式：JPG / PNG / WebP</p>
+            <p className="mt-2.5 text-xs text-text-subtle">
+              対応形式：JPG / PNG / WebP（最大 {MAX_IMAGE_WIDTH} × {MAX_IMAGE_HEIGHT}px）
+            </p>
           </div>
         ) : (
           <div className="flex flex-1 flex-col gap-3.5 p-3 md:p-4">

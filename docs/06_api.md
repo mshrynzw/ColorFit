@@ -689,12 +689,12 @@ Image ID
 }
 ```
 
-上限は Environment Configuration で管理する。
+上限は Environment Configuration で管理する。MVP の既定値は次のとおり。
 
 ```text
-MAX_IMAGE_WIDTH
-MAX_IMAGE_HEIGHT
-MAX_PIXEL_COUNT
+MAX_IMAGE_WIDTH=512
+MAX_IMAGE_HEIGHT=512
+MAX_PIXEL_COUNT=262144
 ```
 
 ---

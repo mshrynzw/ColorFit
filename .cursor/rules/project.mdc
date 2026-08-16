@@ -5,34 +5,84 @@ alwaysApply: true
 
 # ColorFit Project Rules
 
-## Architecture
+## Project
 
-- ColorFit is a monorepo containing a React frontend and a Python backend.
+- ColorFit is a monorepo for a web application that helps web designers adjust images to match a website's color palette.
 - The frontend is located in `frontend/`.
 - The backend is located in `backend/`.
 - Frontend and backend responsibilities must remain clearly separated.
 - The frontend communicates with the backend through HTTP APIs.
-- Image processing must be implemented in the Python backend.
+- Image processing and color matching must be implemented in the Python backend.
 
-## Frontend
+## Source of Truth
 
-- Use React with TypeScript.
-- Use React Router for routing.
-- Do not implement image processing logic in the frontend.
-- API communication must be separated from UI components.
+- Project requirements and design specifications are defined under `docs/`.
+- Before implementing a significant feature, review the relevant documentation under `docs/`.
+- Do not silently change requirements or architecture that are defined in the documentation.
+- If an implementation requires a significant design change, update the relevant documentation and record the reason in `docs/development-log.md`.
 
-## Backend
+Important documentation includes:
 
-- Use Python with FastAPI.
-- Use type hints.
-- Use Pydantic for request and response validation.
-- Keep API routing and business logic separated.
-- Image processing logic belongs in backend services.
+- `docs/product.md`
+- `docs/01_requirements.md`
+- `docs/02_basic-design.md`
+- `docs/03_detail-design/`
+- `docs/04_architecture.md`
+- `docs/05_database.md`
+- `docs/06_api.md`
+- `docs/07_component_design.md`
+- `docs/08_ui_guideline.md`
+- `docs/screen-list.md`
+- `docs/roadmap.md`
+- `docs/development-log.md`
 
-## General
+## Architecture
 
-- Do not introduce unnecessary dependencies.
-- Prefer simple and maintainable solutions.
+- Preserve the existing frontend/backend separation.
+- Do not move business logic between frontend and backend without a clear architectural reason.
+- Do not introduce unnecessary architectural complexity.
+- Prefer simple, maintainable, and testable solutions.
+- Do not change the established architecture without reviewing the relevant design documentation.
+
+## Change Scope
+
+- Make the smallest change necessary to complete the task.
 - Do not modify unrelated files.
-- Keep the existing architecture unless there is a clear reason to change it.
+- Do not perform unrelated refactoring while implementing a feature.
+- Do not introduce unnecessary dependencies.
+- Reuse existing components, utilities, services, and patterns when appropriate.
 
+## Documentation
+
+- Keep implementation and documentation consistent.
+- When changing an API, update the relevant API documentation.
+- When changing the database design, update the database documentation.
+- When changing the architecture, update the architecture documentation.
+- When changing screens or UI behavior, update the relevant UI or screen documentation.
+- Record significant technical decisions, problems, and solutions in `docs/development-log.md`.
+
+## Testing
+
+- Do not remove existing tests without a clear reason.
+- Add appropriate tests for new or changed functionality.
+- Verify relevant tests after making changes.
+- Do not consider a feature complete if its core functionality is not verified.
+
+## Security
+
+- Treat all user input as untrusted.
+- Never expose secrets or credentials to the frontend.
+- Never commit secrets to the repository.
+- Validate user input on the backend.
+- Pay particular attention to security when handling uploaded images and files.
+
+## Completion
+
+Before considering a task complete:
+
+1. Verify that the implementation matches the relevant requirements.
+2. Verify that existing functionality has not been unnecessarily broken.
+3. Run relevant tests and checks.
+4. Check for unnecessary errors or warnings.
+5. Update documentation when required.
+6. Record important decisions or problems in `docs/development-log.md`.

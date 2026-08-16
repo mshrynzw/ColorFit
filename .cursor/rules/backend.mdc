@@ -1,0 +1,67 @@
+---
+description: ColorFit backend development rules
+globs:
+  - "backend/**/*.py"
+---
+
+# ColorFit Backend Rules
+
+## Technology
+
+- Use Python.
+- Use FastAPI.
+- Use Pydantic for request and response validation.
+- Use type hints throughout the backend.
+
+## Architecture
+
+Follow the separation:
+
+Router
+↓
+Service
+↓
+Domain / Processing Logic
+↓
+Infrastructure
+
+- Keep API routing separate from business logic.
+- Do not put complex business logic inside FastAPI route handlers.
+- Image processing belongs in backend services.
+
+## API
+
+- Follow `docs/06_api.md`.
+- Request and response schemas must be explicitly defined.
+- Validate all external input.
+- Do not trust frontend validation.
+
+## Error Handling
+
+- Handle expected errors explicitly.
+- Return appropriate HTTP status codes.
+- Do not expose internal stack traces or sensitive information to clients.
+
+## Configuration
+
+- Use environment variables for environment-specific configuration.
+- Never hard-code secrets.
+- Never commit secrets to the repository.
+
+## Logging
+
+- Log useful operational information.
+- Do not log passwords, tokens, API keys, or other secrets.
+
+## Image Processing
+
+- Keep image processing logic separate from API routing.
+- Prefer small, testable functions.
+- Avoid unnecessary coupling between image processing and storage.
+
+## Code Quality
+
+- Prefer simple and readable Python.
+- Avoid unnecessary abstraction.
+- Do not introduce dependencies without a clear reason.
+- Add tests for important business logic.

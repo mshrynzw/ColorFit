@@ -1,0 +1,72 @@
+---
+description: ColorFit security rules
+globs:
+  - "frontend/**/*.{ts,tsx}"
+  - "backend/**/*.{py}"
+---
+
+# ColorFit Security Rules
+
+## General
+
+- Treat all user input as untrusted.
+- Validate input on the backend.
+- Do not expose secrets to the frontend.
+- Do not commit secrets to Git.
+
+## File Upload
+
+Validate:
+
+- File type
+- File size
+- File content
+- Image dimensions when necessary
+
+Do not trust the filename or extension alone.
+
+## Storage
+
+- Do not expose private storage credentials to the frontend.
+- Use controlled access to stored images.
+- Prevent unauthorized access to user files.
+
+## API
+
+- Validate request parameters and request bodies.
+- Return appropriate error responses.
+- Do not expose internal implementation details.
+
+## Error Messages
+
+Do not expose:
+
+- Stack traces
+- Internal filesystem paths
+- Database credentials
+- API keys
+- Storage credentials
+- Internal service details
+
+## Environment Variables
+
+Use environment variables for secrets and environment-specific configuration.
+
+Never hard-code:
+
+- API keys
+- Passwords
+- Tokens
+- Private keys
+- Database credentials
+
+## Dependencies
+
+Avoid unnecessary dependencies.
+
+Before adding a dependency, consider:
+
+- Security
+- Maintenance
+- Package size
+- Existing alternatives

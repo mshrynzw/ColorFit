@@ -1,0 +1,82 @@
+---
+description: ColorFit UI, UX, responsive design, and animation rules
+globs:
+  - "frontend/**/*.{tsx,ts,css}"
+---
+
+# ColorFit UI Rules
+
+## Design Reference
+
+- Use `docs/ui-reference/` as the visual reference.
+- Follow `docs/08_ui_guideline.md`.
+- Do not arbitrarily change the established visual language.
+
+## Visual Style
+
+ColorFit uses a:
+
+- Futuristic
+- Clean
+- Minimal
+- Professional
+- Technology-oriented
+
+visual style.
+
+## Layout
+
+- Use responsive layouts.
+- Support mobile, tablet, and desktop.
+- Avoid fixed-width layouts that break on small screens.
+
+## Colors
+
+- Follow the ColorFit design tokens and UI guideline.
+- Avoid introducing unrelated colors.
+- Use semantic color roles where appropriate.
+
+## Typography
+
+- Follow the typography rules defined in the UI guideline.
+- Maintain consistent hierarchy.
+
+## Animation
+
+- Use GSAP for complex animations.
+- Prefer CSS/Tailwind transitions for simple state changes.
+- Animations should communicate interaction, hierarchy, or feedback.
+- Do not add animation purely for decoration when it harms usability.
+
+## Reduced Motion
+
+- Respect users who prefer reduced motion.
+- Avoid essential information being communicated only through animation.
+
+## Interaction
+
+Interactive elements must provide clear visual feedback for:
+
+- Hover
+- Focus
+- Active
+- Disabled
+- Loading
+- Error
+- Success
+
+## Loading
+
+Long-running image processing must provide clear loading feedback.
+
+## Error
+
+Errors must be visually distinguishable and understandable to users.
+
+## Accessibility
+
+- Use semantic HTML.
+- Provide accessible labels.
+- Maintain sufficient contrast.
+- Ensure keyboard accessibility.
+-

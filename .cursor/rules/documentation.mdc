@@ -1,0 +1,77 @@
+---
+description: ColorFit documentation rules
+globs:
+  - "docs/**/*"
+  - "frontend/**/*.{ts,tsx}"
+  - "backend/**/*.py"
+---
+
+# ColorFit Documentation Rules
+
+## Source of Truth
+
+The documentation under `docs/` is the project's design specification.
+
+Relevant documentation must be reviewed before implementing significant changes.
+
+## Documentation Structure
+
+Important documents include:
+
+- `docs/product.md`
+- `docs/01_requirements.md`
+- `docs/02_basic-design.md`
+- `docs/03_detail-design/`
+- `docs/04_architecture.md`
+- `docs/05_database.md`
+- `docs/06_api.md`
+- `docs/07_component_design.md`
+- `docs/08_ui_guideline.md`
+- `docs/screen-list.md`
+- `docs/roadmap.md`
+- `docs/development-log.md`
+
+## Synchronization
+
+When implementation changes the following, update the corresponding documentation:
+
+- Architecture
+- API
+- Database
+- Components
+- Screens
+- UI behavior
+- Security
+- Testing strategy
+
+## Development Log
+
+Record important:
+
+- Technical decisions
+- Architecture changes
+- API changes
+- Significant bugs
+- Security issues
+- Performance improvements
+- Design changes
+- Technical debt
+
+in `docs/development-log.md`.
+
+## Roadmap
+
+Follow `docs/roadmap.md`.
+
+If development priorities or scope change, update the roadmap and record the reason in the development log.
+
+## Mermaid
+
+Use Mermaid diagrams when they improve understanding of:
+
+- Architecture
+- Database relationships
+- API flows
+- Component relationships
+
+Prefer embedding diagrams in the relevant documentation rather than creating unnecessary standalone diagram files.

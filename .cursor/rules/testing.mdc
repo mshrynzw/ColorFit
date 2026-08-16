@@ -1,0 +1,74 @@
+---
+description: ColorFit testing rules
+globs:
+  - "frontend/**/*.{ts,tsx}"
+  - "backend/**/*.py"
+  - "tests/**/*"
+---
+
+# ColorFit Testing Rules
+
+## General
+
+- New features should include appropriate tests.
+- Do not remove existing tests without a clear reason.
+- Tests should verify behavior rather than implementation details.
+
+## Frontend
+
+Test important:
+
+- Components
+- User interactions
+- Form validation
+- Loading states
+- Error states
+- API integration
+
+## Backend
+
+Test important:
+
+- API endpoints
+- Pydantic validation
+- Business logic
+- Color matching
+- Image processing
+- Error handling
+
+## Integration
+
+Test the main flow:
+
+Upload
+↓
+Palette
+↓
+Ratio
+↓
+Strength
+↓
+Processing
+↓
+Result
+↓
+Download
+
+## Regression
+
+When fixing a bug:
+
+1. Reproduce the bug.
+2. Add or update a regression test when practical.
+3. Fix the issue.
+4. Confirm the test passes.
+
+## Before Completion
+
+Before considering a feature complete:
+
+- Run relevant tests.
+- Run linting.
+- Run formatting checks.
+- Run the build when applicable.
+-

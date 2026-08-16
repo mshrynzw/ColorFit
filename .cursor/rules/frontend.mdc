@@ -1,0 +1,64 @@
+---
+description: ColorFit frontend development rules
+globs:
+  - "frontend/**/*.{ts,tsx}"
+  - "frontend/**/*.{js,jsx}"
+---
+
+# ColorFit Frontend Rules
+
+## Technology
+
+- Use React with TypeScript.
+- Use React Router for routing.
+- Use Tailwind CSS for styling.
+- Use GSAP for complex animations.
+- Prefer CSS/Tailwind transitions for simple animations.
+
+## Components
+
+- Keep components focused on a single responsibility.
+- Reuse existing components before creating new ones.
+- Do not create duplicate UI components.
+- Separate Page Components, Feature Components, and reusable UI Components.
+
+## Routing
+
+- Follow the routes defined in `docs/screen-list.md`.
+- Do not add or change routes without updating the relevant documentation.
+
+## API
+
+- API communication must be separated from UI components.
+- Do not put HTTP request logic directly into presentation components.
+- Follow `docs/06_api.md` for API contracts.
+
+## State
+
+- Prefer local React state when possible.
+- Use custom hooks when state or logic becomes complex.
+- Do not introduce a global state library unless there is a clear requirement.
+
+## Styling
+
+- Use Tailwind CSS according to `docs/08_ui_guideline.md`.
+- Do not introduce arbitrary styling that conflicts with the existing design system.
+- Follow the UI references under `docs/ui-reference/`.
+
+## Responsive
+
+- All screens must support mobile, tablet, and desktop layouts.
+- Do not implement desktop-only layouts.
+
+## Accessibility
+
+- Use semantic HTML where appropriate.
+- Form controls must have accessible labels.
+- Interactive elements must be keyboard accessible.
+- Do not rely on color alone to communicate important information.
+
+## Image Processing
+
+- Do not implement core image processing logic in the frontend.
+- Image processing must be handled by the Python backend.
+-

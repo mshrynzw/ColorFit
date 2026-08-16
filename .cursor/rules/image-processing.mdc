@@ -1,0 +1,95 @@
+---
+description: ColorFit image processing and color matching rules
+globs:
+  - "backend/**/*image*.py"
+  - "backend/**/*processing*.py"
+  - "backend/**/*color*.py"
+  - "backend/**/image_processing/**/*.py"
+  - "backend/**/color_matching/**/*.py"
+---
+
+# ColorFit Image Processing Rules
+
+## Responsibility
+
+- Image processing must be implemented in the Python backend.
+- Keep image processing independent from FastAPI route handlers.
+- Keep color matching logic independent from storage logic.
+
+## Input
+
+The processing pipeline may receive:
+
+- Original image
+- Color palette
+- Color ratio
+- Processing strength
+
+All input must be validated before processing.
+
+## Color Palette
+
+- Colors must be represented consistently.
+- Validate color format before processing.
+- Do not assume that frontend-provided color values are valid.
+
+## Color Ratio
+
+- Validate that color ratios are valid.
+- Ensure the total ratio follows the rule defined in the design documents.
+- Do not silently normalize invalid user input unless the specification explicitly requires it.
+
+## Processing
+
+The processing pipeline should conceptually follow:
+
+Original Image
+↓
+Image Analysis
+↓
+Color Matching
+↓
+Color Transformation
+↓
+Processed Image
+
+## Libraries
+
+Use Pillow, OpenCV, NumPy, or other image-processing libraries only when necessary.
+
+Do not add multiple libraries for overlapping functionality without a clear reason.
+
+## Quality
+
+- Avoid unnecessary loss of image quality.
+- Preserve image dimensions unless the specification requires resizing.
+- Consider memory usage for large images.
+- Consider processing time for large images.
+
+## Testing
+
+Important image-processing functions must have unit tests.
+
+Tests should cover:
+
+- Valid images
+- Invalid images
+- Palette input
+- Ratio input
+- Strength input
+- Processing output
+- Edge cases
+
+## Determinism
+
+When the algorithm is expected to produce deterministic results, avoid unnecessary randomness.
+
+## Documentation
+
+Changes to the processing algorithm must be documented in:
+
+- `docs/03_detail-design/03_image-processing.md`
+- `docs/03_detail-design/04_color-matching.md`
+- `docs/development-log.md`
+
+when applicable.

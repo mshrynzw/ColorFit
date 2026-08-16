@@ -233,25 +233,25 @@ FastAPI
 
 ### Repository
 
-- [ ] Git Repository確認
-- [ ] Frontend / Backend構成確認
-- [ ] `.gitignore`
-- [ ] `.env.example`
+- [x] Git Repository確認
+- [x] Frontend / Backend構成確認
+- [x] `.gitignore`
+- [x] `.env.example`
 
 ### Cursor
 
-- [ ] `.cursor/`設定
-- [ ] Cursor Rules設定
-- [ ] Project Architecture Rule
-- [ ] Frontend Rule
-- [ ] Backend Rule
-- [ ] Testing Rule
+- [x] `.cursor/`設定
+- [x] Cursor Rules設定
+- [x] Project Architecture Rule
+- [x] Frontend Rule
+- [x] Backend Rule
+- [x] Testing Rule
 
 ### VS Code
 
-- [ ] `.vscode/`
-- [ ] Recommended Extensions
-- [ ] Editor Settings
+- [x] `.vscode/`
+- [x] Recommended Extensions
+- [x] Editor Settings
 
 ---
 
@@ -268,6 +268,9 @@ Backend
 ```
 
 状態にする。
+
+- [x] Frontendが起動できる
+- [x] Backendが起動できる
 
 ---
 

@@ -1,11 +1,10 @@
 # ColorFit
 
-Webデザイナー向けの画像カラー調整Webアプリ。
+Webデザイナー向けの画像カラー調整Webアプリケーションです。
 
-Webデザインの配色を入力すると、
-そのデザインに馴染むように画像の色調を自動調整します。
+Webデザインの配色と配色比率を入力すると、そのデザインに馴染むように画像の色調を調整します。
 
-## Tech Stack
+## 技術スタック
 
 ### Frontend
 
@@ -13,13 +12,14 @@ Webデザインの配色を入力すると、
 - TypeScript
 - React Router
 - Vite
+- Tailwind CSS
+- GSAP
 
 ### Backend
 
 - Python
 - FastAPI
-- Pillow
-- NumPy
+- Pydantic
 
 ### Infrastructure
 
@@ -27,30 +27,44 @@ Webデザインの配色を入力すると、
 - Render
 - Cloudflare R2
 
-## Architecture
+## 構成
 
 ```text
-React
-  ↓
-FastAPI
-  ↓
-Image Processing
-  ↓
-Pillow / NumPy
+colorfit/
+├── frontend/   React / TypeScript / Vite
+├── backend/    Python / FastAPI
+└── docs/       設計書
 ```
 
-まだ実装していない技術については、後から実際に採用したものに合わせて更新すればOKです。
+## 開発環境の起動
 
----
+Frontend と Backend は別プロセスで起動します。
 
-# 9. `.cursor/rules`を作る
+### Frontend
 
-ここからCursor用のルールです。
-
-最初から大量に作らず、まずは**プロジェクト全体のルール1個**から始めるのがおすすめです。
-
-```text
-.cursor/
-└── rules/
-    └── project.mdc
+```bash
+cd frontend
+pnpm install
+cp .env.example .env
+pnpm dev
 ```
+
+`http://localhost:5173`
+
+### Backend
+
+```bash
+cd backend
+uv sync --all-groups
+cp .env.example .env
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+`http://localhost:8000`
+
+- Health Check: `GET /health`
+- OpenAPI UI: `http://localhost:8000/docs`
+
+## ドキュメント
+
+設計書は `docs/` を正とします。

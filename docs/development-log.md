@@ -1001,6 +1001,59 @@ Phase 1：開発環境・Project基盤へ進む。
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 1：開発環境・Project基盤
+
+### 作業
+
+- Monorepo として `frontend/` と `backend/` を追加した
+- Frontend に Vite / React / TypeScript / React Router / Tailwind CSS / GSAP を導入した
+- Backend に FastAPI / Uvicorn / Pydantic Settings を導入した
+- Health Check API `GET /health` を追加した
+- `.env.example` を Frontend / Backend に追加した
+- VS Code の `launch.json` を追加した
+- Frontend の lint / typecheck / build と Backend の pytest を確認した
+
+### 変更内容
+
+ColorFit をローカルで起動できる Project 基盤を構築した。
+
+### 技術的判断
+
+- Frontend のパッケージ管理には、テスト設計書の記述に合わせて pnpm を採用した
+- Backend のパッケージ管理には `pyproject.toml` と uv を採用した
+- Tailwind CSS は v4 を採用し、Vite plugin で読み込む構成にした
+- Health Check は API 設計書 `docs/06_api.md` に従い `GET /health` とした
+- CORS は開発時に Frontend (`http://localhost:5173`) と Backend (`http://localhost:8000`) が別 Origin になるため、Phase 1 の時点で最小限の設定を入れた
+
+### 問題
+
+Backend 詳細設計では Health Check が `GET /api/v1/health`、API 設計では `GET /health` および MVP の API prefix が `/api` となっており、記述が分かれていた。
+
+### 原因
+
+設計書間で API Versioning の方針が完全には揃っていなかった。
+
+### 解決
+
+API Endpoint の正本である `docs/06_api.md` に従い、Phase 1 では `GET /health` を実装した。画像 API の prefix は Phase 3 以降で `docs/06_api.md` の `/api/images` に合わせる。
+
+### 結果
+
+- Frontend は `http://localhost:5173` で起動できる
+- Backend は `http://localhost:8000` で起動できる
+- `GET /health` は `{"status":"ok"}` を返す
+
+### Next Step
+
+- Phase 2：Frontend基盤
+- Route / Layout / Design Token の実装
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

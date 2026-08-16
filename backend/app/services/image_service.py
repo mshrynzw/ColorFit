@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from app.core.config import Settings
 from app.core.exceptions import AppError, ErrorCode
+from app.processing.export import encode_for_download, normalize_export_options
 from app.processing.transformer import transform_image
 from app.schemas.image import ImageDetail, ImageInfo, ProcessResult
 from app.schemas.palette import AdjustmentInput
@@ -79,6 +80,8 @@ class ImageService:
         self,
         raw_image_id: str,
         source: str | None = None,
+        export_format: str | None = None,
+        quality: str | None = None,
     ) -> tuple[bytes, str, str]:
         detail = self._load_detail(raw_image_id)
         image_id = detail.id
@@ -88,6 +91,7 @@ class ImageService:
                 "ダウンロード対象が正しくありません。",
                 400,
             )
+        fmt, level = normalize_export_options(export_format, quality)
         has_processed = self.storage.exists(processed_key(image_id))
         if source == "processed" and not has_processed:
             raise AppError(
@@ -96,10 +100,18 @@ class ImageService:
                 404,
             )
         if source != "original" and has_processed:
+            data = self.storage.get(processed_key(image_id))
+            if fmt is None or level is None:
+                return (
+                    data,
+                    "image/webp",
+                    processed_download_name(detail.filename),
+                )
+            converted, mime_type, extension = encode_for_download(data, fmt, level)
             return (
-                self.storage.get(processed_key(image_id)),
-                "image/webp",
-                processed_download_name(detail.filename),
+                converted,
+                mime_type,
+                processed_download_name(detail.filename, extension),
             )
         return (
             self.storage.get(original_key(image_id)),

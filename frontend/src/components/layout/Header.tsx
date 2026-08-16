@@ -71,7 +71,7 @@ export function Header() {
   return (
     <header
       ref={headerRef}
-      className="fixed inset-x-0 top-0 z-[100] border-b border-border bg-[rgb(6_7_10_/_0.55)] backdrop-blur-[16px]"
+      className="fixed inset-x-0 top-0 z-[100] border-b border-border bg-[var(--color-header-bg)] backdrop-blur-[16px]"
     >
       <div className="mx-auto flex h-[var(--header-h)] max-w-[1200px] items-center justify-between gap-6 px-5 md:px-8">
         <div className="flex min-w-0 items-center gap-3" data-anim="header-in">
@@ -187,7 +187,7 @@ export function Header() {
       <div
         id={menuId}
         className={cn(
-          'border-t border-border bg-[rgb(8_9_13_/_0.92)] md:hidden',
+          'border-t border-border bg-[var(--color-header-bg)] md:hidden',
           menuOpen ? 'block' : 'hidden',
         )}
         aria-hidden={!menuOpen}

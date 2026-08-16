@@ -1714,7 +1714,6 @@ MVP Release
 
 - 画像最大寸法は 512 × 512px
 - Render 無料枠は Sleep / Cold Start がある
-- 書き出し実体は WebP 固定（Settings の JPEG / PNG は未接続）
 - 手動調整（色温度など）と調整プリセットは未実装（P2）
 
 ---
@@ -1742,6 +1741,52 @@ Download
 ### Status
 
 All Core Features Complete.
+
+---
+
+## 2026-08-16
+
+### Phase
+
+Release 後：Settings の実動作接続
+
+### 作業
+
+- 初期 Strength を Settings から Editor へ反映した
+- Dark / Light / System のテーマ切替を CSS Variable で実装した
+- Download 時に JPEG / PNG / 画質へ変換する API を追加した
+- 未接続の設定（自動調整 ON/OFF、自然な色味、メタデータ保持）を Settings UI から外した
+
+### 技術的判断
+
+- 設定の保存先は従来どおり Local Storage（`colorfit.settings`）
+- 処理結果の保存形式は WebP のままにし、書き出し形式は Download 時に Backend で変換する
+- メタデータ保持はセキュリティ方針のため有効化しない
+
+### Next Step
+
+- User Feedback / Bug Fix / UX Improvement
+
+---
+
+## 2026-08-16
+
+### Phase
+
+Release 後：Light Theme のコントラスト修正
+
+### 作業
+
+- Primary Button と Segmented Control の文字色が Light Theme で背景と同化する問題を修正した
+- CTA 用の色（`--color-cta-*`）を Theme Token として分離した
+
+### 原因
+
+白い CTA の文字色に `--color-background` を使っていた。Dark では暗い文字になるが、Light では背景も明るくなり文字が見えなくなっていた。
+
+### Next Step
+
+- User Feedback / Bug Fix / UX Improvement
 
 ---
 

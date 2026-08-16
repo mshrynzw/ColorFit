@@ -15,6 +15,8 @@ def test_processed_download_name_keeps_stem() -> None:
     assert processed_download_name("archive.tar.png") == "archive.tar.webp"
     assert processed_download_name("no-ext") == "no-ext.webp"
     assert processed_download_name(None) == "image.webp"
+    assert processed_download_name("sample.png", "jpg") == "sample.jpg"
+    assert processed_download_name("sample.png", "png") == "sample.png"
 
 
 def test_detect_format_from_signature() -> None:

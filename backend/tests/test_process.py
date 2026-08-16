@@ -83,6 +83,40 @@ def test_process_returns_completed_result(image_client: TestClient) -> None:
     assert download.content != _solid_png((220, 30, 30))
 
 
+def test_download_converts_processed_image_format(image_client: TestClient) -> None:
+    image_id = _upload(image_client)
+    processed = image_client.post(f"/api/images/{image_id}/process", json=VALID_BODY)
+    assert processed.status_code == 200
+
+    jpeg = image_client.get(
+        f"/api/images/{image_id}/download?format=jpeg&quality=standard",
+    )
+    assert jpeg.status_code == 200
+    assert jpeg.headers["content-type"].startswith("image/jpeg")
+    assert "sample.jpg" in jpeg.headers["content-disposition"]
+    jpeg_image = Image.open(BytesIO(jpeg.content))
+    assert jpeg_image.format == "JPEG"
+
+    png = image_client.get(f"/api/images/{image_id}/download?format=png&quality=light")
+    assert png.status_code == 200
+    assert png.headers["content-type"].startswith("image/png")
+    assert "sample.png" in png.headers["content-disposition"]
+
+    original = image_client.get(
+        f"/api/images/{image_id}/download?source=original&format=jpeg",
+    )
+    assert original.status_code == 200
+    assert original.headers["content-type"].startswith("image/png")
+
+
+def test_download_rejects_invalid_export_format(image_client: TestClient) -> None:
+    image_id = _upload(image_client)
+    image_client.post(f"/api/images/{image_id}/process", json=VALID_BODY)
+    response = image_client.get(f"/api/images/{image_id}/download?format=gif")
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == ErrorCode.INVALID_REQUEST
+
+
 def test_process_rejects_invalid_ratio(image_client: TestClient) -> None:
     image_id = _upload(image_client)
     body = {

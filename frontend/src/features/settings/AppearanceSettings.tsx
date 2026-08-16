@@ -16,13 +16,6 @@ export function AppearanceSettings({
       <SettingCard
         title="テーマ"
         description="ColorFitの表示テーマを設定します。"
-        note={
-          theme === 'dark' ? null : (
-            <p className="setting-card__note">
-              MVPではダークテーマで表示します。選択内容は保存されます。
-            </p>
-          )
-        }
       >
         <ThemeSelector value={theme} onChange={onThemeChange} />
       </SettingCard>

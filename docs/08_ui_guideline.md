@@ -2432,9 +2432,11 @@ Theme変更などが必要なColorはCSS Variableを利用してもよい。
 
 # 216. Theme
 
-MVPではDark ThemeをPrimary Themeとする。
+MVPの既定 Theme は Dark とする。
 
-将来的にLight Themeを追加する場合、Color Tokenを差し替える方式を優先する。
+Settings から Dark / Light / System を切り替えられる。System は `prefers-color-scheme` に従う。
+
+Light Theme は Color Token（CSS Variable）を差し替えて適用する。
 
 ---
 

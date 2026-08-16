@@ -11,7 +11,7 @@ type ButtonStyleProps = {
 
 const variantClassName: Record<ButtonVariant, string> = {
   primary:
-    'border-transparent bg-linear-to-br from-[#eef2ff] to-white text-background shadow-none hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-8px_rgba(94,234,212,0.35),0_0_0_1px_rgba(94,234,212,0.4)]',
+    'border-transparent bg-[linear-gradient(to_bottom_right,var(--color-cta-from),var(--color-cta-to))] text-[var(--color-cta-fg)] shadow-none hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-8px_rgba(15,118,110,0.28),0_0_0_1px_rgba(15,118,110,0.35)]',
   secondary:
     'border-glass-border bg-glass text-text hover:border-primary/50 hover:bg-primary/10',
   ghost:

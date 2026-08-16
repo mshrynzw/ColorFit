@@ -5,7 +5,7 @@ export function BackgroundLayer() {
         className="absolute inset-[-10%] opacity-100"
         style={{
           backgroundImage:
-            'linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px)',
+            'linear-gradient(to right, var(--color-grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--color-grid-line) 1px, transparent 1px)',
           backgroundSize: '64px 64px',
           maskImage:
             'radial-gradient(ellipse 70% 60% at 50% 20%, black 30%, transparent 75%)',

@@ -1,5 +1,4 @@
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
-import { Switch } from '../../components/ui/Switch'
 import {
   FILENAME_OPTIONS,
   FORMAT_LABELS,
@@ -16,9 +15,7 @@ type ExportSettingsProps = {
   defaultFormat: ExportFormat
   defaultQuality: ExportQuality
   filenameMode: FilenameMode
-  preserveMetadata: boolean
   onFilenameModeChange: (value: FilenameMode) => void
-  onPreserveMetadataChange: (value: boolean) => void
   onGoToBasic: () => void
 }
 
@@ -33,9 +30,7 @@ export function ExportSettings({
   defaultFormat,
   defaultQuality,
   filenameMode,
-  preserveMetadata,
   onFilenameModeChange,
-  onPreserveMetadataChange,
   onGoToBasic,
 }: ExportSettingsProps) {
   return (
@@ -86,6 +81,7 @@ export function ExportSettings({
           </span>
         </div>
       </SettingCard>
+      {/* メタデータ保持は処理時に EXIF を残さない方針のため非表示
       <SettingCard
         title="画像のメタデータを保持する"
         description="画像に含まれるメタデータを可能な範囲で保持します。"
@@ -97,6 +93,7 @@ export function ExportSettings({
           />
         }
       />
+      */}
     </>
   )
 }

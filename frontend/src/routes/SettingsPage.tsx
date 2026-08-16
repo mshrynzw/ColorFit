@@ -124,17 +124,9 @@ export function SettingsPage() {
               ) : null}
               {item.id === 'processing' ? (
                 <ProcessingSettings
-                  autoAdjust={draft.autoAdjust}
                   adjustmentStrength={draft.adjustmentStrength}
-                  naturalColorPriority={draft.naturalColorPriority}
-                  onAutoAdjustChange={(autoAdjust) => {
-                    updateDraft({ autoAdjust })
-                  }}
                   onStrengthChange={(adjustmentStrength) => {
                     updateDraft({ adjustmentStrength })
-                  }}
-                  onNaturalChange={(naturalColorPriority) => {
-                    updateDraft({ naturalColorPriority })
                   }}
                 />
               ) : null}
@@ -143,12 +135,8 @@ export function SettingsPage() {
                   defaultFormat={draft.defaultFormat}
                   defaultQuality={draft.defaultQuality}
                   filenameMode={draft.filenameMode}
-                  preserveMetadata={draft.preserveMetadata}
                   onFilenameModeChange={(filenameMode) => {
                     updateDraft({ filenameMode })
-                  }}
-                  onPreserveMetadataChange={(preserveMetadata) => {
-                    updateDraft({ preserveMetadata })
                   }}
                   onGoToBasic={() => {
                     setCategory('basic')

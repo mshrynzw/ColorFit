@@ -14,6 +14,7 @@ import { useImageProcessing } from '../hooks/useImageProcessing'
 import { useImageUpload } from '../hooks/useImageUpload'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { usePalette } from '../hooks/usePalette'
+import { useSettings } from '../hooks/useSettings'
 import { PROCESSING_STATUS_MESSAGES } from '../lib/constants/processing'
 import { PAGE_TITLES, ROUTES } from '../lib/constants/routes'
 import { formatFileSize, formatImageType } from '../lib/format/fileSize'
@@ -27,7 +28,8 @@ export function EditorPage() {
   const restoreId = searchParams.get('imageId')
   const { status, image, previewUrl, errorMessage, selectFile, clearImage, restoreFromId } =
     useImageUpload()
-  const palette = usePalette()
+  const { settings } = useSettings()
+  const palette = usePalette(settings.adjustmentStrength / 100)
   const {
     status: processingStatus,
     processedUrl,

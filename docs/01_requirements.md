@@ -903,7 +903,7 @@ v0.1.0 は 2026-08-16 に Production（Vercel / Render / Cloudflare R2）で Cor
 - [ ] プリセットを利用できる（P2）
 - [x] Before / Afterを比較できる
 - [x] 調整結果を確認できる
-- [x] 調整済み画像を書き出せる（MVP は WebP 固定。JPEG / PNG は Settings UI のみ）
+- [x] 調整済み画像を書き出せる（保存は WebP。Download 時に JPEG / PNG へ変換できる）
 - [x] レスポンシブに対応している
 - [x] 基本的なアクセシビリティに対応している
 - [x] エラー処理が実装されている

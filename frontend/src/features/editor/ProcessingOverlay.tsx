@@ -16,7 +16,7 @@ export function ProcessingOverlay({
       className={
         isProcess
           ? 'editor-processing-overlay'
-          : 'absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[rgb(6_7_10_/_0.62)]'
+          : 'absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[var(--color-overlay)]'
       }
       aria-hidden="true"
     >

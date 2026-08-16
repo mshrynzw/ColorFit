@@ -66,9 +66,16 @@ def get_result(
 def download_image(
     image_id: str,
     source: str | None = Query(default=None),
+    export_format: str | None = Query(default=None, alias="format"),
+    quality: str | None = Query(default=None),
     image_service: ImageService = Depends(get_image_service),
 ) -> Response:
-    data, mime_type, filename = image_service.download(image_id, source)
+    data, mime_type, filename = image_service.download(
+        image_id,
+        source,
+        export_format,
+        quality,
+    )
     safe_name = filename.replace('"', "").replace("\r", "").replace("\n", "")
     ascii_name = safe_name.encode("ascii", "ignore").decode() or "image"
     return Response(

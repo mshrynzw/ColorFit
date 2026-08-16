@@ -9,6 +9,7 @@ import {
   uploadImage,
 } from '../src/api/images'
 import { appRoutes } from '../src/app/router'
+import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from '../src/lib/constants/settings'
 
 vi.mock('../src/api/images', () => ({
   uploadImage: vi.fn(),
@@ -38,6 +39,7 @@ function pngFile() {
 
 describe('editor palette settings', () => {
   beforeEach(() => {
+    localStorage.clear()
     vi.stubGlobal('createImageBitmap', async () => ({
       width: 32,
       height: 24,
@@ -85,6 +87,17 @@ describe('editor palette settings', () => {
 
     expect(screen.getByText('80%')).toBeInTheDocument()
     expect(screen.getByText(/合計/)).toHaveTextContent('100%')
+  })
+
+  it('uses the saved default strength as the initial slider value', async () => {
+    localStorage.setItem(
+      SETTINGS_STORAGE_KEY,
+      JSON.stringify({ ...DEFAULT_SETTINGS, adjustmentStrength: 40 }),
+    )
+    await renderEditor()
+
+    expect(screen.getByLabelText('適用強度')).toHaveValue('0.4')
+    expect(screen.getByText('40%')).toBeInTheDocument()
   })
 
   it('updates the strength slider', async () => {

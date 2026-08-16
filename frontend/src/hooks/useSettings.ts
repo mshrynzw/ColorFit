@@ -16,7 +16,7 @@ import {
   persistSettings,
   settingsEqual,
 } from '../lib/settings/storage'
-import type { AppSettings } from '../types/settings'
+import type { AppSettings, ThemeMode } from '../types/settings'
 
 type SaveStatus = 'idle' | 'saving' | 'saved'
 
@@ -32,6 +32,21 @@ type SettingsContextValue = {
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
 
+function resolveTheme(theme: ThemeMode): 'dark' | 'light' {
+  if (theme === 'system') {
+    return window.matchMedia('(prefers-color-scheme: light)').matches
+      ? 'light'
+      : 'dark'
+  }
+  return theme
+}
+
+function syncDocumentTheme(theme: ThemeMode) {
+  const resolved = resolveTheme(theme)
+  document.documentElement.dataset.theme = resolved
+  document.documentElement.style.colorScheme = resolved
+}
+
 function syncDocumentMotion(settings: AppSettings) {
   const osReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const reduced =
@@ -40,10 +55,27 @@ function syncDocumentMotion(settings: AppSettings) {
 }
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [saved, setSaved] = useState<AppSettings>(() => loadSettings())
+  const [saved, setSaved] = useState<AppSettings>(() => {
+    const loaded = loadSettings()
+    syncDocumentTheme(loaded.theme)
+    syncDocumentMotion(loaded)
+    return loaded
+  })
   const [draft, setDraft] = useState<AppSettings>(saved)
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
   const savedTimer = useRef<number>(0)
+
+  useEffect(() => {
+    syncDocumentTheme(saved.theme)
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)')
+    const update = () => {
+      syncDocumentTheme(saved.theme)
+    }
+    mediaQuery.addEventListener('change', update)
+    return () => {
+      mediaQuery.removeEventListener('change', update)
+    }
+  }, [saved.theme])
 
   useEffect(() => {
     syncDocumentMotion(saved)

@@ -21,11 +21,18 @@ export function DownloadButton({ imageId, filename }: DownloadButtonProps) {
     setErrorMessage(null)
     setStatus('loading')
     try {
-      const blob = await downloadImage(imageId)
+      const blob = await downloadImage(imageId, {
+        format: settings.defaultFormat,
+        quality: settings.defaultQuality,
+      })
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = processedDownloadName(filename, settings.filenameMode)
+      link.download = processedDownloadName(
+        filename,
+        settings.filenameMode,
+        settings.defaultFormat,
+      )
       document.body.append(link)
       link.click()
       link.remove()

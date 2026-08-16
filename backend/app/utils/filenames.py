@@ -15,8 +15,9 @@ def sanitize_filename(raw: str | None) -> str:
     return cleaned[:255]
 
 
-def processed_download_name(raw: str | None) -> str:
+def processed_download_name(raw: str | None, extension: str = "webp") -> str:
     stem = Path(sanitize_filename(raw)).stem.strip(" .")
+    suffix = extension.lstrip(".") or "webp"
     if not stem or stem in {".", ".."}:
-        return "image.webp"
-    return f"{stem}.webp"
+        return f"image.{suffix}"
+    return f"{stem}.{suffix}"

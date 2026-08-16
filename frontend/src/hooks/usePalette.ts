@@ -9,11 +9,13 @@ import {
 } from '../lib/validation/palette'
 import type { AdjustmentPayload, PaletteColor } from '../types/palette'
 
-export function usePalette() {
+export function usePalette(initialStrength = DEFAULT_STRENGTH) {
   const [colors, setColors] = useState<PaletteColor[]>(() =>
     DEFAULT_PALETTE.map((item) => ({ ...item })),
   )
-  const [strength, setStrengthState] = useState(DEFAULT_STRENGTH)
+  const [strength, setStrengthState] = useState(() =>
+    Math.max(0, Math.min(1, initialStrength)),
+  )
   const [drafts, setDrafts] = useState<Record<string, string>>({})
 
   const validation = useMemo(() => {

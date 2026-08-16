@@ -1264,6 +1264,21 @@ processed
 Processed。未生成なら 404
 ```
 
+書き出し形式は Query で指定する。Preview 用の Download では省略し、保存済み WebP を返す。
+
+```http
+GET /api/images/{imageId}/download?format=jpeg&quality=high
+```
+
+```text
+format   webp | jpeg | png     省略時は保存済み WebP のまま
+quality  high | standard | light  format 指定時の既定は standard
+```
+
+`source=original` のときは format / quality を無視し、アップロード原画像を返す。
+
+不正な format / quality は 400 `INVALID_REQUEST`。
+
 ---
 
 # 69. Download Response
@@ -1275,11 +1290,12 @@ Content-Disposition: attachment; filename="sample.webp"
 Cache-Control: private, no-store
 ```
 
-Processed Image のファイル名は、元画像のファイル名から拡張子を除いた部分に `.webp` を付けたもの。
+Processed Image のファイル名は、元画像のファイル名から拡張子を除いた部分に、書き出し形式の拡張子を付けたもの。
 
 ```text
-test.png → test.webp
-CHASE!.png → CHASE!.webp
+test.png + webp → test.webp
+test.png + jpeg → test.jpg
+CHASE!.png + png → CHASE!.png
 ```
 
 元ファイル名が使えない場合は `image.webp` とする。

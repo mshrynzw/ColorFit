@@ -6,7 +6,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useSettings } from '../../hooks/useSettings'
 import { cn } from '../../lib/cn'
 import { PAGE_LABELS, ROUTES } from '../../lib/constants/routes'
-import { getGsap } from '../../lib/gsap'
+import { loadGsap } from '../../lib/gsap'
 import { ButtonLink } from '../ui/Button'
 
 const HOME_NAV_ITEMS = [
@@ -44,19 +44,27 @@ export function Header() {
       return
     }
 
-    const { gsap } = getGsap()
-    const context = gsap.context(() => {
-      gsap.from('[data-anim="header-in"]', {
-        opacity: 0,
-        y: -8,
-        duration: 0.45,
-        stagger: 0.06,
-        ease: 'power2.out',
-      })
-    }, headerRef)
+    let cancelled = false
+    let context: { revert: () => void } | undefined
+
+    void loadGsap().then(({ gsap }) => {
+      if (cancelled || !headerRef.current) {
+        return
+      }
+      context = gsap.context(() => {
+        gsap.from('[data-anim="header-in"]', {
+          opacity: 0,
+          y: -8,
+          duration: 0.45,
+          stagger: 0.06,
+          ease: 'power2.out',
+        })
+      }, headerRef)
+    })
 
     return () => {
-      context.revert()
+      cancelled = true
+      context?.revert()
     }
   }, [reducedMotion, isHome])
 

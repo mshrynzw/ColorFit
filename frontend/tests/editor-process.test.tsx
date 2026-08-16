@@ -30,14 +30,16 @@ const downloadImageMock = vi.mocked(downloadImage)
 const getImageMock = vi.mocked(getImage)
 const getResultMock = vi.mocked(getResult)
 
-function renderEditor(path = '/editor') {
+async function renderEditor(path = '/editor') {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: [path],
   })
-  return render(<RouterProvider router={router} />)
+  const view = render(<RouterProvider router={router} />)
+  await screen.findByRole('heading', { level: 1, name: '画像を調整' })
+  return view
 }
 
-function renderEditorWithId() {
+async function renderEditorWithId() {
   return renderEditor('/editor?imageId=550e8400-e29b-41d4-a716-446655440000')
 }
 
@@ -96,15 +98,15 @@ describe('editor image processing', () => {
     })
   })
 
-  it('keeps the process button disabled until an image is uploaded', () => {
-    renderEditor()
+  it('keeps the process button disabled until an image is uploaded', async () => {
+    await renderEditor()
 
     expect(screen.getByRole('button', { name: 'ColorFitで調整する' })).toBeDisabled()
   })
 
   it('processes an uploaded image and opens the result page', async () => {
     const user = userEvent.setup()
-    renderEditor()
+    await renderEditor()
 
     await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
     expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()
@@ -132,7 +134,7 @@ describe('editor image processing', () => {
           resolveProcess = resolve
         }),
     )
-    renderEditor()
+    await renderEditor()
 
     await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
     expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()
@@ -160,7 +162,7 @@ describe('editor image processing', () => {
         500,
       ),
     )
-    renderEditor()
+    await renderEditor()
 
     await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
     expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()
@@ -195,7 +197,7 @@ describe('editor image processing', () => {
           resolveImage = resolve
         }),
     )
-    renderEditorWithId()
+    await renderEditorWithId()
 
     expect(
       (await screen.findAllByText('画像を読み込んでいます…')).length,

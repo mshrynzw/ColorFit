@@ -1545,6 +1545,40 @@ UI Reference に近い Visual Quality と、次アクションが分かる Empty
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 14：Performance / Security
+
+### 作業
+
+- Upload / Process / Download に Rate Limit を追加し、既存の File Validation / Path Traversal / CORS / Error Leak を再確認した
+- Editor / Result / Settings を Route Lazy Load し、GSAP を動的 import して初期 Bundle を分けた
+- Download に `Cache-Control: private, no-store` を付け、ユーザー画像を Public Cache しないようにした
+
+### 変更内容
+
+Production公開前の Performance / Security を、設計書の範囲で実装と Test に落とした。
+
+### 技術的判断
+
+- Rate Limit は外部 Library を追加せず、In-memory の簡易 Limiter とする（MVP。複数プロセスでは共有しない）
+- CORS の `*` は無視し、Frontend Origin のみ許可する
+- Production では OpenAPI UI を公開しない
+- Thumbnail 段階読み込みは未導入。Processed 出力は WebP、Upload はサイズ / 寸法 / ピクセル数で制限する
+
+### 結果
+
+- Frontend: 52 passed
+- Backend: 54 passed
+
+### Next Step
+
+- Phase 15：Deployment
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。

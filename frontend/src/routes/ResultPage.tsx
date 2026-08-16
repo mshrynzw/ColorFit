@@ -11,7 +11,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useResult } from '../hooks/useResult'
 import { PAGE_TITLES, ROUTES } from '../lib/constants/routes'
-import { getGsap } from '../lib/gsap'
+import { loadGsap } from '../lib/gsap'
 
 export function ResultPage() {
   usePageTitle(PAGE_TITLES[ROUTES.result])
@@ -25,18 +25,25 @@ export function ResultPage() {
     if (reducedMotion || result.status !== 'success' || !rootRef.current) {
       return
     }
-    const { gsap } = getGsap()
-    const context = gsap.context(() => {
-      gsap.from('[data-anim="result-in"]', {
-        opacity: 0,
-        y: 16,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'power2.out',
-      })
-    }, rootRef)
+    let cancelled = false
+    let context: { revert: () => void } | undefined
+    void loadGsap().then(({ gsap }) => {
+      if (cancelled || !rootRef.current) {
+        return
+      }
+      context = gsap.context(() => {
+        gsap.from('[data-anim="result-in"]', {
+          opacity: 0,
+          y: 16,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: 'power2.out',
+        })
+      }, rootRef)
+    })
     return () => {
-      context.revert()
+      cancelled = true
+      context?.revert()
     }
   }, [reducedMotion, result.status])
 

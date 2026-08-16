@@ -16,7 +16,7 @@ import {
 import { useSettings } from '../hooks/useSettings'
 import { PAGE_TITLES, ROUTES } from '../lib/constants/routes'
 import { SETTINGS_CATEGORIES } from '../lib/constants/settings'
-import { getGsap } from '../lib/gsap'
+import { loadGsap } from '../lib/gsap'
 import type { SettingsCategory } from '../types/settings'
 
 export function SettingsPage() {
@@ -38,18 +38,25 @@ export function SettingsPage() {
     if (reducedMotion || !rootRef.current) {
       return
     }
-    const { gsap } = getGsap()
-    const context = gsap.context(() => {
-      gsap.from('[data-anim="settings-in"]', {
-        opacity: 0,
-        y: 16,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'power2.out',
-      })
-    }, rootRef)
+    let cancelled = false
+    let context: { revert: () => void } | undefined
+    void loadGsap().then(({ gsap }) => {
+      if (cancelled || !rootRef.current) {
+        return
+      }
+      context = gsap.context(() => {
+        gsap.from('[data-anim="settings-in"]', {
+          opacity: 0,
+          y: 16,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: 'power2.out',
+        })
+      }, rootRef)
+    })
     return () => {
-      context.revert()
+      cancelled = true
+      context?.revert()
     }
   }, [reducedMotion])
 

@@ -59,10 +59,10 @@ describe('result page', () => {
     })
   })
 
-  it('shows an empty state without a result id', () => {
+  it('shows an empty state without a result id', async () => {
     renderResult('/result')
 
-    expect(screen.getByRole('heading', { name: '調整結果' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '調整結果' })).toBeInTheDocument()
     expect(screen.getByText('まだ調整結果がありません。')).toBeInTheDocument()
     expect(
       screen.getByText('エディターで画像を調整すると、ここに結果が表示されます。'),
@@ -134,11 +134,11 @@ describe('result page', () => {
     expect(screen.getByRole('link', { name: 'エディターへ戻る' })).toBeInTheDocument()
   })
 
-  it('shows a loading state while the result is fetched', () => {
+  it('shows a loading state while the result is fetched', async () => {
     getResultMock.mockImplementation(() => new Promise(() => {}))
     renderResult('/result?imageId=550e8400-e29b-41d4-a716-446655440000')
 
-    expect(screen.getByText('調整結果を読み込んでいます…')).toBeInTheDocument()
+    expect(await screen.findByText('調整結果を読み込んでいます…')).toBeInTheDocument()
     expect(screen.getByRole('main')).toHaveAttribute('aria-busy', 'true')
   })
 

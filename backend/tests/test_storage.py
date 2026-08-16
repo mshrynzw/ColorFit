@@ -29,6 +29,16 @@ def test_local_storage_rejects_path_traversal(tmp_path: Path) -> None:
     assert not list(tmp_path.rglob("secret"))
 
 
+def test_local_storage_rejects_nested_path_traversal(tmp_path: Path) -> None:
+    storage = LocalStorage(str(tmp_path / "storage"))
+
+    with pytest.raises(AppError) as exc_info:
+        storage.get("images/../../../secret")
+
+    assert exc_info.value.code == ErrorCode.INVALID_REQUEST
+    assert not (tmp_path / "secret").exists()
+
+
 def test_local_storage_missing_object_is_not_found(tmp_path: Path) -> None:
     storage = LocalStorage(str(tmp_path / "storage"))
     with pytest.raises(AppError) as exc_info:

@@ -5,7 +5,7 @@ from app.api.router import api_router
 from app.core.config import get_settings
 from app.core.error_handlers import register_exception_handlers
 from app.core.logging import setup_logging
-from app.core.middleware import RequestContextMiddleware
+from app.core.middleware import RateLimitMiddleware, RequestContextMiddleware
 from app.core.request_context import REQUEST_ID_HEADER
 
 
@@ -29,6 +29,7 @@ def create_app() -> FastAPI:
         allow_headers=["Accept", "Content-Type", REQUEST_ID_HEADER],
         expose_headers=[REQUEST_ID_HEADER, "Content-Disposition"],
     )
+    application.add_middleware(RateLimitMiddleware)
     application.add_middleware(RequestContextMiddleware)
 
     register_exception_handlers(application)

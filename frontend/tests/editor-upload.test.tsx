@@ -19,11 +19,13 @@ vi.mock('../src/api/images', () => ({
 const uploadImageMock = vi.mocked(uploadImage)
 const deleteImageMock = vi.mocked(deleteImage)
 
-function renderEditor() {
+async function renderEditor() {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: ['/editor'],
   })
-  return render(<RouterProvider router={router} />)
+  const view = render(<RouterProvider router={router} />)
+  await screen.findByRole('heading', { level: 1, name: '画像を調整' })
+  return view
 }
 
 function pngFile(name = 'sample.png') {
@@ -51,11 +53,11 @@ describe('editor image upload', () => {
     deleteImageMock.mockResolvedValue()
   })
 
-  it('shows an empty upload state', () => {
-    renderEditor()
+  it('shows an empty upload state', async () => {
+    await renderEditor()
 
     expect(
-      screen.getByRole('heading', { level: 1, name: '画像を調整' }),
+      await screen.findByRole('heading', { level: 1, name: '画像を調整' }),
     ).toBeInTheDocument()
     expect(
       screen.getByText('まだ画像がアップロードされていません。'),
@@ -67,7 +69,7 @@ describe('editor image upload', () => {
 
   it('uploads a png and shows a preview', async () => {
     const user = userEvent.setup()
-    renderEditor()
+    await renderEditor()
 
     await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
 
@@ -77,7 +79,7 @@ describe('editor image upload', () => {
   })
 
   it('rejects an unsupported file before calling the api', async () => {
-    renderEditor()
+    await renderEditor()
 
     fireEvent.drop(screen.getByLabelText('画像のアップロード領域'), {
       dataTransfer: {
@@ -94,7 +96,7 @@ describe('editor image upload', () => {
   it('rejects an oversized file before calling the api', async () => {
     const file = new File(['png-bytes'], 'huge.png', { type: 'image/png' })
     Object.defineProperty(file, 'size', { value: 10 * 1024 * 1024 + 1 })
-    renderEditor()
+    await renderEditor()
 
     fireEvent.drop(screen.getByLabelText('画像のアップロード領域'), {
       dataTransfer: { files: [file] },
@@ -109,7 +111,7 @@ describe('editor image upload', () => {
     uploadImageMock.mockRejectedValue(
       new ColorFitApiError('STORAGE_UPLOAD_FAILED', '画像を保存できませんでした。', 503),
     )
-    renderEditor()
+    await renderEditor()
 
     await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
 
@@ -121,7 +123,7 @@ describe('editor image upload', () => {
 
   it('removes an uploaded image', async () => {
     const user = userEvent.setup()
-    renderEditor()
+    await renderEditor()
 
     await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
     expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()

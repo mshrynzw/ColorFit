@@ -61,6 +61,7 @@ def test_upload_get_download_delete_png(image_client: TestClient) -> None:
     assert download.content == payload
     assert download.headers["content-type"].startswith("image/png")
     assert "sample.png" in download.headers["content-disposition"]
+    assert download.headers["cache-control"] == "private, no-store"
 
     deleted = image_client.delete(f"/api/images/{image_id}")
     assert deleted.status_code == 204

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { SettingsProvider } from '../../hooks/useSettings'
@@ -5,6 +6,7 @@ import { ErrorBoundary } from '../feedback/ErrorBoundary'
 import { BackgroundLayer } from './BackgroundLayer'
 import { Footer } from './Footer'
 import { Header } from './Header'
+import { PageLoading } from './PageLoading'
 import { SkipLink } from './SkipLink'
 
 export function AppLayout() {
@@ -15,7 +17,9 @@ export function AppLayout() {
         <SkipLink />
         <Header />
         <ErrorBoundary>
-          <Outlet />
+          <Suspense fallback={<PageLoading />}>
+            <Outlet />
+          </Suspense>
         </ErrorBoundary>
         <Footer />
       </div>

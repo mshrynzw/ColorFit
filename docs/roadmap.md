@@ -1049,12 +1049,12 @@ Mobile Performance
 
 ## 作業項目
 
-- [ ] 不要なBundle削減
-- [ ] Image Optimization
-- [ ] Lazy Loading
-- [ ] Animation Optimization
-- [ ] API Optimization
-- [ ] Large Image対策
+- [x] 不要なBundle削減
+- [x] Image Optimization
+- [x] Lazy Loading
+- [x] Animation Optimization
+- [x] API Optimization
+- [x] Large Image対策
 
 ---
 
@@ -1076,15 +1076,15 @@ Error Response
 
 ## 作業項目
 
-- [ ] File Type Validation
-- [ ] File Size Validation
-- [ ] File Content Validation
-- [ ] Path Traversal対策
-- [ ] Secret管理
-- [ ] CORS
-- [ ] API Validation
-- [ ] Storage Access Control
-- [ ] Error Information Leak確認
+- [x] File Type Validation
+- [x] File Size Validation
+- [x] File Content Validation
+- [x] Path Traversal対策
+- [x] Secret管理
+- [x] CORS
+- [x] API Validation
+- [x] Storage Access Control
+- [x] Error Information Leak確認
 
 ---
 

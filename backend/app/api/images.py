@@ -76,6 +76,7 @@ def download_image(
         media_type=mime_type,
         headers={
             "Content-Disposition": f'attachment; filename="{ascii_name}"',
+            "Cache-Control": "private, no-store",
         },
     )
 

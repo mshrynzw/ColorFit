@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from app.core.config import get_settings
 from app.core.exceptions import ErrorCode
 from app.core.request_context import REQUEST_ID_HEADER
 from app.main import create_app
@@ -31,3 +32,20 @@ def test_internal_error_hides_exception_details() -> None:
     assert "do not leak this" not in response.text
     assert "RuntimeError" not in response.text
     assert REQUEST_ID_HEADER in response.headers
+
+
+def test_production_hides_openapi(monkeypatch) -> None:
+    monkeypatch.setenv("APP_ENV", "production")
+    get_settings.cache_clear()
+    try:
+        response = TestClient(create_app()).get("/openapi.json")
+        docs = TestClient(create_app()).get("/docs")
+    finally:
+        get_settings.cache_clear()
+
+    assert response.status_code == 404
+    assert docs.status_code == 404
+    assert "swagger" not in response.text.lower()
+    assert "openapi" not in docs.text.lower() or docs.headers["content-type"].startswith(
+        "application/json"
+    )

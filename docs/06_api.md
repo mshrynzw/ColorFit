@@ -1272,6 +1272,7 @@ Processed。未生成なら 404
 200 OK
 Content-Type: image/webp
 Content-Disposition: attachment; filename="sample.webp"
+Cache-Control: private, no-store
 ```
 
 Processed Image のファイル名は、元画像のファイル名から拡張子を除いた部分に `.webp` を付けたもの。

@@ -108,7 +108,10 @@ describe('core user flow', () => {
     renderApp('/')
 
     await user.click(screen.getAllByRole('link', { name: 'はじめる' })[0])
-    await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
+    await user.upload(
+      await screen.findByLabelText('画像ファイルを選択'),
+      pngFile(),
+    )
     expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'ColorFitで調整する' }))

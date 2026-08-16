@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     r2_secret_access_key: str = ""
     r2_bucket_name: str = ""
     r2_public_base_url: str = ""
+    rate_limit_window_seconds: int = 60
+    rate_limit_upload: int = 30
+    rate_limit_process: int = 20
+    rate_limit_download: int = 60
 
     @property
     def is_development(self) -> bool:
@@ -33,8 +37,18 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [
-            origin.strip() for origin in self.cors_origins.split(",") if origin.strip()
+            origin.strip()
+            for origin in self.cors_origins.split(",")
+            if origin.strip() and origin.strip() != "*"
         ]
+
+    def rate_limit_for(self, bucket: str) -> tuple[int, int]:
+        limits = {
+            "upload": self.rate_limit_upload,
+            "process": self.rate_limit_process,
+            "download": self.rate_limit_download,
+        }
+        return limits.get(bucket, 0), self.rate_limit_window_seconds
 
 
 @lru_cache

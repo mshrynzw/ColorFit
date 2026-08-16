@@ -6,18 +6,20 @@ import { describe, expect, it } from 'vitest'
 import { appRoutes } from '../src/app/router'
 import { SETTINGS_STORAGE_KEY } from '../src/lib/constants/settings'
 
-function renderSettings() {
+async function renderSettings() {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: ['/settings'],
   })
-  return render(<RouterProvider router={router} />)
+  const view = render(<RouterProvider router={router} />)
+  await screen.findByRole('heading', { level: 1, name: '設定' })
+  return view
 }
 
 describe('settings page', () => {
-  it('renders settings categories and about information', () => {
-    renderSettings()
+  it('renders settings categories and about information', async () => {
+    await renderSettings()
 
-    expect(screen.getByRole('heading', { level: 1, name: '設定' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: '設定' })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: '基本設定' })).toBeInTheDocument()
     expect(screen.getByText('このアプリについて')).toBeInTheDocument()
     expect(screen.getByText('0.1.0')).toBeInTheDocument()
@@ -25,8 +27,9 @@ describe('settings page', () => {
 
   it('shows unsaved state, saves to localStorage, and can reset', async () => {
     const user = userEvent.setup()
-    renderSettings()
+    await renderSettings()
 
+    await screen.findByRole('heading', { level: 1, name: '設定' })
     await user.click(screen.getByRole('tab', { name: '外観' }))
     await user.click(screen.getByRole('button', { name: 'ライト' }))
 
@@ -54,7 +57,7 @@ describe('settings page', () => {
 
   it('switches to the export panel from the summary link', async () => {
     const user = userEvent.setup()
-    renderSettings()
+    await renderSettings()
 
     await user.click(screen.getByRole('tab', { name: '書き出し' }))
     expect(screen.getByText('ファイル名の初期値')).toBeInTheDocument()

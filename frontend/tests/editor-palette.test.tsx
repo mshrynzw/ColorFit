@@ -23,11 +23,13 @@ const uploadImageMock = vi.mocked(uploadImage)
 const deleteImageMock = vi.mocked(deleteImage)
 const processImageMock = vi.mocked(processImage)
 
-function renderEditor() {
+async function renderEditor() {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: ['/editor'],
   })
-  return render(<RouterProvider router={router} />)
+  const view = render(<RouterProvider router={router} />)
+  await screen.findByRole('heading', { level: 1, name: '画像を調整' })
+  return view
 }
 
 function pngFile() {
@@ -61,8 +63,8 @@ describe('editor palette settings', () => {
     })
   })
 
-  it('shows a validation error for an invalid hex color', () => {
-    renderEditor()
+  it('shows a validation error for an invalid hex color', async () => {
+    await renderEditor()
 
     fireEvent.change(screen.getByLabelText('メインカラー HEXコード'), {
       target: { value: '#GGGGGG' },
@@ -74,8 +76,8 @@ describe('editor palette settings', () => {
     expect(screen.getByRole('button', { name: 'ColorFitで調整する' })).toBeDisabled()
   })
 
-  it('keeps the ratio total at 100 when a slider changes', () => {
-    renderEditor()
+  it('keeps the ratio total at 100 when a slider changes', async () => {
+    await renderEditor()
 
     fireEvent.change(screen.getByLabelText('メイン', { exact: true }), {
       target: { value: '80' },
@@ -85,8 +87,8 @@ describe('editor palette settings', () => {
     expect(screen.getByText(/合計/)).toHaveTextContent('100%')
   })
 
-  it('updates the strength slider', () => {
-    renderEditor()
+  it('updates the strength slider', async () => {
+    await renderEditor()
 
     fireEvent.change(screen.getByLabelText('適用強度'), { target: { value: '0.4' } })
 
@@ -95,7 +97,7 @@ describe('editor palette settings', () => {
 
   it('sends the edited palette and strength to process', async () => {
     const user = userEvent.setup()
-    renderEditor()
+    await renderEditor()
 
     await user.upload(screen.getByLabelText('画像ファイルを選択'), pngFile())
     expect(await screen.findByAltText('sample.pngのプレビュー')).toBeInTheDocument()

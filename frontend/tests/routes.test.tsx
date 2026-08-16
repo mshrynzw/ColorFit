@@ -38,24 +38,24 @@ describe('frontend routes', () => {
     await user.click(screen.getAllByRole('link', { name: 'はじめる' })[0])
 
     expect(
-      screen.getByRole('heading', { level: 1, name: '画像を調整' }),
+      await screen.findByRole('heading', { level: 1, name: '画像を調整' }),
     ).toBeInTheDocument()
     expect(
       screen.getByText('まだ画像がアップロードされていません。'),
     ).toBeInTheDocument()
   })
 
-  it('renders the result route', () => {
+  it('renders the result route', async () => {
     renderApp('/result')
     expect(
-      screen.getByRole('heading', { level: 1, name: '調整結果' }),
+      await screen.findByRole('heading', { level: 1, name: '調整結果' }),
     ).toBeInTheDocument()
   })
 
-  it('renders the settings route', () => {
+  it('renders the settings route', async () => {
     renderApp('/settings')
     expect(
-      screen.getByRole('heading', { level: 1, name: '設定' }),
+      await screen.findByRole('heading', { level: 1, name: '設定' }),
     ).toBeInTheDocument()
   })
 })

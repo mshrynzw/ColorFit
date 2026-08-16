@@ -495,10 +495,10 @@ Frontend
 
 ## Validation
 
-- [ ] File Type
-- [ ] File Size
-- [ ] Image Format
-- [ ] Image Integrity
+- [x] File Type
+- [x] File Size
+- [x] Image Format
+- [x] Image Integrity
 
 ---
 

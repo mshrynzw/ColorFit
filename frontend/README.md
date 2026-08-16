@@ -27,6 +27,8 @@ pnpm dev
 
 開発サーバーは `http://localhost:5173` で起動します。
 
+`/editor` からの画像 Upload には Backend（`http://localhost:8000`）が必要です。`VITE_API_BASE_URL` は `.env.example` を参照してください。
+
 主な Route：
 
 ```text

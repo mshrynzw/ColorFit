@@ -1206,6 +1206,41 @@ Frontend が R2 に直接触れず、ImageService → StorageService → Adapter
 
 ---
 
+## 2026-08-16
+
+### Phase
+
+Phase 5：Image Upload
+
+### 作業
+
+- Editor に ImageUploader / ImagePreview を追加した
+- `useImageUpload` と API Client（`POST /api/images` / `DELETE /api/images/{imageId}`）を追加した
+- Frontend で File Type / Size / Format / Decode を Validation し、Backend でも再検証する
+- Empty / Loading / Error / Preview の各 State を Editor に表示するようにした
+
+### 変更内容
+
+ユーザーが Editor から JPEG / PNG / WebP を選び、Upload 後に Preview できるようにした。
+
+### 技術的判断
+
+- ImageUploader は API を直接呼ばず、Hook → API Client → FastAPI に責務を分けた
+- Preview は Upload 成功後の Object URL を使い、Frontend で画像処理は行わない
+- Zod は File Validation だけなら過剰なため追加していない
+- Palette / Processing は Phase 6 以降に残し、Upload と Preview に範囲を限定した
+
+### 結果
+
+- Editor から画像を選択または Drag & Drop して Upload できる
+- 非対応形式やサイズ超過は Frontend で即座にエラー表示する
+
+### Next Step
+
+- Phase 6：Color Matching（Palette / Ratio / Strength 入力）
+
+---
+
 # 59. ログ追加ルール
 
 新しい開発作業を行った場合、最も下に新しいEntryを追加する。
